@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+*.user
+*.vcxproj
+*.filters
+/.vs/OGLBlueBook
