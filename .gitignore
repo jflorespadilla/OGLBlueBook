@@ -34,3 +34,6 @@
 *.vcxproj
 *.filters
 /.vs/OGLBlueBook
+/OGLBlueBook/x64/Debug/OGLBlueBook.tlog
+/OGLBlueBook/x64/Debug
+/x64/Debug
