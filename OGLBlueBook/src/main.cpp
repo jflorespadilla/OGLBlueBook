@@ -12,4 +12,10 @@ int main(int argv, char **argc) {
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 	}
 	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+
+	static const GLfloat red[] = { 1.0f, 0.0f, 0.0f, 0.0f, };
+
+	while (1) {
+		glClearBufferfv(GL_COLOR, 0, red);
+	}
 }
