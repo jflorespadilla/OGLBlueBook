@@ -1,5 +1,7 @@
 #include <GLFW/glfw3.h>
 
+// Write render function
+
 int main() {
     GLFWwindow* window;
 
