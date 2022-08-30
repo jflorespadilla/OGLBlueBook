@@ -1,10 +1,7 @@
 #include <GLFW/glfw3.h>
 
 // Write render function
-void render() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(1.0f, 0.5f, 0.5f, 0.0f);
-}
+void render();
 
 int main() {
     GLFWwindow* window;
@@ -39,4 +36,9 @@ int main() {
 
     glfwTerminate();
     return 0;
+}
+
+void render() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(1.0f, 0.5f, 0.5f, 0.0f);
 }
