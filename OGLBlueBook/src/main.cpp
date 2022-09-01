@@ -1,6 +1,6 @@
 #include <GLFW/glfw3.h>
 
-// Write render function
+// Refactor render function
 void render();
 
 int main() {
