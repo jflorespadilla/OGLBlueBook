@@ -1,7 +1,8 @@
 #include <GLFW/glfw3.h>
+#include <math.h>
+#include <chrono>
 
-// Refactor render function
-void render();
+void render(std::chrono::duration<float> dt);
 
 int main() {
     GLFWwindow* window;
@@ -21,24 +22,28 @@ int main() {
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    auto t1 = std::chrono::steady_clock::now();
+    auto t2 = std::chrono::steady_clock::now();
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-        render();
+        render(t2-t1);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
         /* Poll for and process events */
         glfwPollEvents();
+        t1 = t2;
+        t2 = std::chrono::steady_clock::now();
     }
 
     glfwTerminate();
     return 0;
 }
 
-void render() {
+void render(std::chrono::duration<float> dt) {
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(1.0f, 0.5f, 0.5f, 0.0f);
+    glClearColor(cos(dt.count() * 1.0f), sin(dt.count() * 0.5f), cos(dt.count() * 0.5f), sin(dt.count() * 0.0f));
 }
