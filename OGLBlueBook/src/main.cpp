@@ -45,5 +45,5 @@ int main() {
 
 void render(std::chrono::duration<float> dt) {
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(cos(dt.count() * 1.0f), sin(dt.count() * 0.5f), cos(dt.count() * 0.5f), sin(dt.count() * 0.0f));
+    glClearColor(cos(dt.count()) * 1.0f, cos(dt.count()) * 0.5f, cos(dt.count()) * 0.5f, 0.0f);
 }
