@@ -48,5 +48,5 @@ int main() {
 
 void render(std::chrono::duration<float> dt, std::default_random_engine& rng, std::uniform_int<int>& dist) {
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(cos(dist(rng)) * dt.count(), sin(dist(rng)) * dt.count(), cos(dist(rng)) * dt.count(), 0.0f);
+    glClearColor(cos(dist(rng)), sin(dist(rng)), cos(dist(rng)), 0.0f);
 }
