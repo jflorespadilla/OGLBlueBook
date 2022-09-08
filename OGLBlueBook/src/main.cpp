@@ -1,6 +1,7 @@
 #include <GLFW/glfw3.h>
 #include <math.h>
 #include <chrono>
+#include <random>
 
 void render(std::chrono::duration<float> dt);
 
@@ -44,6 +45,9 @@ int main() {
 }
 
 void render(std::chrono::duration<float> dt) {
+    std::default_random_engine rng(dt.count());
+    std::uniform_int_distribution<int> dist(1, 100);
+
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(cos(dt.count()) * 1.0f, cos(dt.count()) * 0.5f, cos(dt.count()) * 0.5f, 0.0f);
+    glClearColor(cos(dist(rng)) * 1.0f, cos(dist(rng)) * 0.5f, cos(dist(rng)) * 0.5f, 0.0f);
 }
