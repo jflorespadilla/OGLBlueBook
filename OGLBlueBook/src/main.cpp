@@ -3,10 +3,12 @@
 #include <chrono>
 #include <random>
 
-void render(std::chrono::duration<float> dt);
+void render(std::chrono::duration<float> dt, std::default_random_engine& rng, std::uniform_int<int>& dist);
 
 int main() {
     GLFWwindow* window;
+    std::default_random_engine rng(std::chrono::steady_clock::now().time_since_epoch().count());
+    std::uniform_int_distribution<int> dist(1, 10);
 
     /* Initialize the library */
     if (!glfwInit())
@@ -29,7 +31,7 @@ int main() {
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-        render(t2-t1);
+        render(t2-t1, rng, dist);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -44,10 +46,7 @@ int main() {
     return 0;
 }
 
-void render(std::chrono::duration<float> dt) {
-    std::default_random_engine rng(dt.count());
-    std::uniform_int_distribution<int> dist(1, 100);
-
+void render(std::chrono::duration<float> dt, std::default_random_engine& rng, std::uniform_int<int>& dist) {
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(cos(dist(rng)) * 1.0f, cos(dist(rng)) * 0.5f, cos(dist(rng)) * 0.5f, 0.0f);
+    glClearColor(cos(dist(rng)) * dt.count(), sin(dist(rng)) * dt.count(), cos(dist(rng)) * dt.count(), 0.0f);
 }
