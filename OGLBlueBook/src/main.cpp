@@ -10,11 +10,9 @@ int main() {
     std::default_random_engine rng(std::chrono::steady_clock::now().time_since_epoch().count());
     std::uniform_int_distribution<int> dist(1, 10);
 
-    /* Initialize the library */
     if (!glfwInit())
         return -1;
 
-    /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
     if (!window)
     {
@@ -22,21 +20,17 @@ int main() {
         return -1;
     }
 
-    /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
     auto t1 = std::chrono::steady_clock::now();
     auto t2 = std::chrono::steady_clock::now();
-    /* Loop until the user closes the window */
+
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
         render(t2-t1, rng, dist);
 
-        /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
-        /* Poll for and process events */
         glfwPollEvents();
         t1 = t2;
         t2 = std::chrono::steady_clock::now();
