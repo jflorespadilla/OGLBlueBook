@@ -3,7 +3,7 @@
 #include <chrono>
 #include <random>
 
-void render(std::chrono::duration<float> dt, std::default_random_engine& rng, std::uniform_int<int>& dist);
+void render(float dt);
 
 int main() {
     GLFWwindow* window;
@@ -27,7 +27,7 @@ int main() {
 
     while (!glfwWindowShouldClose(window))
     {
-        render(t2-t1, rng, dist);
+        render(t2.time_since_epoch().count());
 
         glfwSwapBuffers(window);
 
@@ -40,7 +40,7 @@ int main() {
     return 0;
 }
 
-void render(std::chrono::duration<float> dt, std::default_random_engine& rng, std::uniform_int<int>& dist) {
+void render(float dt) {
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(cos(dist(rng)), sin(dist(rng)), cos(dist(rng)), 0.0f);
+    glClearColor(cos(dt), sin(dt), cos(dt), 0.0f);
 }
