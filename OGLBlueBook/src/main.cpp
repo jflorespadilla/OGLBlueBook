@@ -1,4 +1,5 @@
 #include <GLFW/glfw3.h>
+#include <gl/GL.h>
 #include <math.h>
 #include <chrono>
 #include <random>
@@ -41,6 +42,8 @@ int main() {
 }
 
 void render(float dt) {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(cos(dt), sin(dt), cos(dt), 0.0f);
+    const GLfloat color[] = { (float)cos(dt) * 0.5f + 0.5f,
+                                              (float)sin(dt) * 0.5f + 0.5f,
+                                               (float)cos(dt) * 0.5f + 0.5f, 0.0f };
+    // Use buffer clearing
 }
