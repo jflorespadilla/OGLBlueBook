@@ -1,5 +1,5 @@
+#include <gl/gl3w.h>
 #include <GLFW/glfw3.h>
-#include <gl/GL.h>
 #include <math.h>
 #include <chrono>
 #include <random>
@@ -22,7 +22,7 @@ int main() {
     }
 
     glfwMakeContextCurrent(window);
-
+    gl3wInit();
     auto t1 = std::chrono::steady_clock::now();
     auto t2 = std::chrono::steady_clock::now();
 
@@ -42,8 +42,8 @@ int main() {
 }
 
 void render(float dt) {
-    const GLfloat color[] = { (float)cos(dt) * 0.5f + 0.5f,
-                                              (float)sin(dt) * 0.5f + 0.5f,
-                                               (float)cos(dt) * 0.5f + 0.5f, 0.0f };
-    // Use buffer clearing
+    GLfloat color[] = { cos(dt) * 0.5f + 0.5f,
+                                             sin(dt) * 0.5f + 0.5f,
+                                             cos(dt) * 0.5f + 0.5f, 0.0f };
+    glClearBufferfv(GL_COLOR, 0, color);
 }
