@@ -2,21 +2,18 @@
 #include <GLFW/glfw3.h>
 #include <math.h>
 #include <chrono>
-#include <random>
 
 void render(float dt);
 
 int main() {
     GLFWwindow* window;
-    std::default_random_engine rng(std::chrono::steady_clock::now().time_since_epoch().count());
-    std::uniform_int_distribution<int> dist(1, 10);
 
-    if (!glfwInit())
+    if (!glfwInit()) {
         return -1;
+    }
 
     window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
-    {
+    if (!window) {
         glfwTerminate();
         return -1;
     }
@@ -26,8 +23,7 @@ int main() {
     auto t1 = std::chrono::steady_clock::now();
     auto t2 = std::chrono::steady_clock::now();
 
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         render(t2.time_since_epoch().count());
 
         glfwSwapBuffers(window);
@@ -43,7 +39,7 @@ int main() {
 
 void render(float dt) {
     GLfloat color[] = { cos(dt) * 0.5f + 0.5f,
-                                             sin(dt) * 0.5f + 0.5f,
-                                             cos(dt) * 0.5f + 0.5f, 0.0f };
+                                   sin(dt) * 0.5f + 0.5f,
+                                   0.0f, 0.0f };
     glClearBufferfv(GL_COLOR, 0, color);
 }
