@@ -3,6 +3,20 @@
 #include <math.h>
 #include <chrono>
 
+static const GLchar* vertex_shader_source[] = {
+    "#version 450 core                                             \n"
+    "void main (void) {                                               \n"
+    "   gl_Position = vec4(0.0, 0.0, 0.5, 1.0);           \n"
+    " }                                                                          \n"
+};
+
+static const GLchar* fragment_shader_source[] = {
+    "#version 450 core                                             \n"
+    "out vec4 color;                                                   \n"
+    "void main (void) {                                               \n"
+    "   color = vec4(0.0, 0.8, 1.0, 1.0);                     \n"
+    " }                                                                          \n"
+};
 void render(float dt);
 
 int main() {
@@ -24,7 +38,7 @@ int main() {
     auto t2 = std::chrono::steady_clock::now();
 
     while (!glfwWindowShouldClose(window)) {
-        render(t2.time_since_epoch().count());
+        render((t2-t1).count());
 
         glfwSwapBuffers(window);
 
