@@ -1,13 +1,17 @@
+#pragma once
 #include <gl/gl3w.h>
 #include <GLFW/glfw3.h>
 #include <math.h>
 #include <chrono>
 
 static const GLchar* vertex_shader_source[] = {
-    "#version 450 core                                             \n"
-    "void main (void) {                                               \n"
-    "   gl_Position = vec4(0.0, 0.0, 0.5, 1.0);           \n"
-    " }                                                                          \n"
+    "#version 450 core                                                                         \n"
+    "void main (void) {                                                                           \n"
+    "   const vec4 vertices[3] = vec4[3](vec4(0.25, -0.25, 0.5, 1.0), \n"
+    "                                                         vec4(-0.25, -0.25, 0.5, 1.0),\n"
+    "                                                         vec4(0.25, 0.25, 0.5, 1.0)); \n"
+    "   gl_Position = vertices[gl_VertexID];                         \n"
+    " }                                                                                     \n"
 };
 
 static const GLchar* fragment_shader_source[] = {
@@ -67,13 +71,10 @@ int main() {
 }
 
 void render(float dt) {
-    GLfloat color[] = { cos(dt) * 0.5f + 0.5f,
-                                   sin(dt) * 0.5f + 0.5f,
-                                   0.0f, 0.0f };
+    GLfloat color[] = { 0.0f, 0.2f, 0.0f, 1.0f };
     glClearBufferfv(GL_COLOR, 0, color);
-
     glUseProgram(rendering_program);
-    glDrawArrays(GL_POINTS, 0, 1);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 GLuint compile_shaders() {
