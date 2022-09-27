@@ -30,7 +30,10 @@ GLuint compile_shaders();
 
 int main() {
     GLFWwindow* window;
-
+    /// <summary>
+    /// Adusting logic.
+    /// </summary>
+    /// <returns></returns>
     if (!glfwInit()) {
         return -1;
     }
