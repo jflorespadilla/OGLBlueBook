@@ -30,10 +30,7 @@ GLuint compile_shaders();
 
 int main() {
     GLFWwindow* window;
-    /// <summary>
-    /// Adusting logic.
-    /// </summary>
-    /// <returns></returns>
+   
     if (!glfwInit()) {
         return -1;
     }
@@ -73,6 +70,7 @@ int main() {
     return 0;
 }
 
+// This should be changed to a class function
 void render(float dt) {
     GLfloat color[] = { 0.0f, 0.2f, 0.0f, 1.0f };
     glClearBufferfv(GL_COLOR, 0, color);
@@ -80,7 +78,9 @@ void render(float dt) {
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
+// Try to make a separate class function for this
 GLuint compile_shaders() {
+    // Make this into class variables
     GLuint vertex_shader;
     GLuint fragment_shader;
     GLuint program;
