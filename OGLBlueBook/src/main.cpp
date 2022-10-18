@@ -44,7 +44,6 @@ int main() {
     glfwMakeContextCurrent(window);
     gl3wInit();
 
-    // Create context and vertex array object
     rendering_program = compile_shaders();
     glCreateVertexArrays(1, &vertex_array_object);
     glBindVertexArray(vertex_array_object);
@@ -62,7 +61,6 @@ int main() {
         t2 = std::chrono::steady_clock::now();
     }
 
-    // Delete context and vertex array
     glDeleteVertexArrays(1, &vertex_array_object);
     glDeleteProgram(rendering_program);
 
@@ -70,7 +68,6 @@ int main() {
     return 0;
 }
 
-// This should be changed to a class function
 void render(float dt) {
     GLfloat color[] = { 0.0f, 0.2f, 0.0f, 1.0f };
     glClearBufferfv(GL_COLOR, 0, color);
@@ -78,7 +75,6 @@ void render(float dt) {
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-// Try to make a separate class function for this
 GLuint compile_shaders() {
     // Make this into class variables
     GLuint vertex_shader;
