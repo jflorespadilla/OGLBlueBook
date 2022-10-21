@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <math.h>
 #include <chrono>
+//#include <GFXManager>
 
 static const GLchar* vertex_shader_source[] = {
     "#version 450 core                                                                         \n"
@@ -25,6 +26,7 @@ static const GLchar* fragment_shader_source[] = {
 GLuint rendering_program;
 GLuint vertex_array_object;
 
+// Most important function to import
 void render(float dt);
 GLuint compile_shaders();
 
