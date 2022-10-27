@@ -59,13 +59,11 @@ void GFXManager::Start() {
 
 void GFXManager::Run() {
     while (!glfwWindowShouldClose(m_window)) {
-        Renderer(0); // Currently not using time, but need to restructure to use time properly.
+        Renderer(glfwGetTime()); // Using whatever is availalbe through glfw for now
 
         glfwSwapBuffers(m_window);
 
         glfwPollEvents();
-        //t1 = t2;
-        //t2 = std::chrono::steady_clock::now();
     }
 }
 
