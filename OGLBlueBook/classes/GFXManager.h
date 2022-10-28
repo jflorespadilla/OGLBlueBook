@@ -2,6 +2,8 @@
 #include <gl/gl3w.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <string>
+#include <fstream>
 
 class GFXManager
 {
@@ -11,7 +13,8 @@ public:
 	void Start();
 	void Run();
 	void Renderer(float dt);
-	GLuint CompileShaders(const GLchar** vertex_shader_source , const GLchar** fragment_shader_source);
+	GLuint CompileShaders(const GLchar* vertex_shader_source , const GLchar* fragment_shader_source);
+	const char* GetShader(const char* fileName);
 
 private:
 	GLuint m_rendering_program;
