@@ -22,10 +22,14 @@ m_glfwFlag(false)
 }
 
 GFXManager::~GFXManager() {
-    glDeleteVertexArrays(1, &m_vertex_array_object);
-    glDeleteProgram(m_rendering_program);
+    if (!m_glfwFlag) {
+        glDeleteVertexArrays(1, &m_vertex_array_object);
+        glDeleteProgram(m_rendering_program);
 
-    glfwTerminate();
+        glfwTerminate();
+    }
+    delete m_window;
+    m_window = NULL;
 }
 
 void GFXManager::Start() {
@@ -53,7 +57,10 @@ void GFXManager::Start() {
         m_rendering_program = CompileShaders(VS_Source, FS_Source);
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
-    } // Add else case for error checking. Skipping for now.
+    }
+    else {
+        std::cout << "Error in creating window!";
+    }
     return;
 }
 
