@@ -34,23 +34,11 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
 
         // Need to make a getter function for shaders. This works for now.
-        const GLchar* VS_Source = /*GetShader("shaders/vs.shader");*/
-            "#version 450 core                                                                         \n"
-            "void main (void) {                                                                           \n"
-            "   const vec4 vertices[3] = vec4[3](vec4(0.25, -0.25, 0.5, 1.0), \n"
-            "                                                         vec4(-0.25, -0.25, 0.5, 1.0),\n"
-            "                                                         vec4(0.25, 0.25, 0.5, 1.0)); \n"
-            "   gl_Position = vertices[gl_VertexID];                         \n"
-            " }                                                                                     \n";
+        std::string VS_Source = GetShader("shaders/vs.shader");
 
-        const GLchar* FS_Source =  /*GetShader("shaders/fs.shader"); */
-            "#version 450 core                                             \n"
-            "out vec4 color;                                                   \n"
-            "void main (void) {                                               \n"
-            "   color = vec4(0.0, 0.8, 1.0, 1.0);                     \n"
-            " }                                                                          \n";
+        std::string FS_Source =  GetShader("shaders/fs.shader");
 
-        m_rendering_program = CompileShaders(VS_Source, FS_Source);
+        m_rendering_program = CompileShaders(VS_Source.c_str(), FS_Source.c_str());
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
     }
@@ -94,10 +82,10 @@ GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLch
     return program;
 }
 
-const char* GFXManager::GetShader(const char* filePath) {
+std::string GFXManager::GetShader(const char* filePath) {
     std::fstream fileStream;
     std::string line;
-    std::string content = "";
+    std::string content;
 
     fileStream.open(filePath, std::ios::in);
     if (fileStream.is_open()) {
@@ -111,7 +99,7 @@ const char* GFXManager::GetShader(const char* filePath) {
         }
         fileStream.close();
     }
-    return content.c_str();
+    return content;
 }
 
 void GFXManager::Renderer(float dt) {

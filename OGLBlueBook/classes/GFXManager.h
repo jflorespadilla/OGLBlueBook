@@ -14,7 +14,7 @@ public:
 	void Run();
 	void Renderer(float dt);
 	GLuint CompileShaders(const GLchar* vertex_shader_source , const GLchar* fragment_shader_source);
-	const char* GetShader(const char* fileName);
+	std::string GetShader(const char* fileName);
 
 private:
 	GLuint m_rendering_program;
