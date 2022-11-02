@@ -52,6 +52,9 @@ void GFXManager::Run() {
     while (!glfwWindowShouldClose(m_window)) {
         Renderer(glfwGetTime());
 
+        // filling out extra logic here
+
+
         glfwSwapBuffers(m_window);
 
         glfwPollEvents();
@@ -87,7 +90,6 @@ std::string GFXManager::GetShader(const char* filePath) {
     std::string line;
     std::string content;
 
-    // This works for now. I might need to readjust this to use something other than strings
     fileStream.open(filePath, std::ios::in);
     if (fileStream.is_open()) {
         while (std::getline(fileStream, line)) {
