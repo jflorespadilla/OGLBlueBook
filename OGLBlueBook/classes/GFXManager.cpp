@@ -52,9 +52,6 @@ void GFXManager::Run() {
     while (!glfwWindowShouldClose(m_window)) {
         Renderer(glfwGetTime());
 
-        // filling out extra logic here
-
-
         glfwSwapBuffers(m_window);
 
         glfwPollEvents();
