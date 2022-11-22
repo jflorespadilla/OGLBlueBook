@@ -107,8 +107,6 @@ void GFXManager::Renderer(float dt) {
     glClearBufferfv(GL_COLOR, 0, color);
     glUseProgram(m_rendering_program);
 
-    // Adjust values here
-
     GLfloat attrib[] = { (float)sin(dt) * 0.5f + 0.5f, (float)cos(dt) * 0.5f + 0.6f, 0.0f, 0.0f };
     glVertexAttrib4fv(0, attrib);
     glDrawArrays(GL_TRIANGLES, 0, 3);
