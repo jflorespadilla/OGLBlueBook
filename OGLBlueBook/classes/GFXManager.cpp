@@ -103,11 +103,11 @@ std::string GFXManager::GetShader(const char* filePath) {
 }
 
 void GFXManager::Renderer(float dt) {
-    const GLfloat color[] = { (float)sin(dt) * 0.5f + 0.5f, (float)cos(dt) * 0.5f + 0.5f, 0.0f, 0.0f};
+    const GLfloat color[] = { (float)sin(dt) * 0.5f + 0.5f, (float)cos(dt) * 0.5f + 0.5f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, color);
     glUseProgram(m_rendering_program);
 
-    GLfloat attrib[] = { (float)sin(dt) * 0.5f + 0.5f, (float)cos(dt) * 0.5f + 0.6f, 0.0f, 0.0f };
+    GLfloat attrib[] = { (float)sin(dt) * 0.5f , (float)cos(dt) * 0.6f, 0.0f, 0.0f };
     glVertexAttrib4fv(0, attrib);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
