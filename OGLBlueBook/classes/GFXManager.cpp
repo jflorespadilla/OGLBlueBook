@@ -38,7 +38,9 @@ void GFXManager::Start() {
 
         std::string FS_Source =  GetShader("shaders/fs.shader");
 
-        m_rendering_program = CompileShaders(VS_Source.c_str(), FS_Source.c_str());
+        std::string TS_Source = GetShader("shaders/ts.shader");
+
+        m_rendering_program = CompileShaders(VS_Source.c_str(), FS_Source.c_str(), TS_Source.c_str());
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
     }
@@ -56,9 +58,10 @@ void GFXManager::Run() {
     }
 }
 
-GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLchar* fragment_shader_source) {
+GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLchar* fragment_shader_source, const GLchar* tess_shader_source) {
     GLuint vertex_shader;
     GLuint fragment_shader;
+    GLuint tess_shader;
     GLuint program;
 
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -68,6 +71,10 @@ GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLch
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
     glCompileShader(fragment_shader);
+
+    tess_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
+    glShaderSource(tess_shader, 1, &tess_shader_source, NULL);
+    glCompileShader(tess_shader);
 
     program = glCreateProgram();
     glAttachShader(program, vertex_shader);
