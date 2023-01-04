@@ -40,6 +40,7 @@ void GFXManager::Start() {
 
         std::string TS_Source = GetShader("shaders/ts.shader");
 
+        // TODO - Rework this portion. I need to make it easier to feed different types of shaders to one compile shader function.
         m_rendering_program = CompileShaders(VS_Source.c_str(), FS_Source.c_str(), TS_Source.c_str());
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
