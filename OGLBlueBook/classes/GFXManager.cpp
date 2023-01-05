@@ -42,8 +42,10 @@ void GFXManager::Start() {
 
         std::string TES_Source = GetShader("shaders/tes.shader");
 
+        std::string GEO_Source = GetShader("shaders/geo.shader");
+
         // TODO - Rework this portion. I need to make it easier to feed different types of shaders to one compile shader function.
-        m_rendering_program = CompileShaders(VS_Source.c_str(), FS_Source.c_str(), TCS_Source.c_str(), TES_Source.c_str());
+        m_rendering_program = CompileShaders(VS_Source.c_str(), FS_Source.c_str(), TCS_Source.c_str(), TES_Source.c_str(), GEO_Source.c_str());
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
     }
@@ -61,12 +63,13 @@ void GFXManager::Run() {
     }
 }
 
-GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLchar* fragment_shader_source, const GLchar* tessc_shader_source, const GLchar* tesse_shader_source) {
+GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLchar* fragment_shader_source, const GLchar* tessc_shader_source, const GLchar* tesse_shader_source, const GLchar* geo_shader_source) {
     // TODO - Rework this function to work with an array of strings and find a way to choose the correct shader type to create 
     GLuint vertex_shader;
     GLuint fragment_shader;
     GLuint tessc_shader;
     GLuint tesse_shader;
+    GLuint geo_shader;
     GLuint program;
 
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -85,6 +88,10 @@ GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLch
     glShaderSource(tesse_shader, 1, &tesse_shader_source, NULL);
     glCompileShader(tesse_shader);
 
+    geo_shader = glCreateShader(GL_GEOMETRY_SHADER);
+    glShaderSource(geo_shader, 1, &geo_shader_source, NULL);
+    glCompileShader(geo_shader);
+
     program = glCreateProgram();
     glAttachShader(program, vertex_shader);
     glAttachShader(program, fragment_shader);
@@ -92,6 +99,9 @@ GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLch
 
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
+    glDeleteShader(tessc_shader);
+    glDeleteShader(tesse_shader);
+    glDeleteShader(geo_shader);
 
     return program;
 }
