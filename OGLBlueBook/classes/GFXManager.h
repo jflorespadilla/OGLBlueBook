@@ -13,7 +13,7 @@ public:
 	void Start();
 	void Run();
 	void Renderer(float dt);
-	GLuint CompileShaders(const GLchar* vertex_shader_source , const GLchar* fragment_shader_source, const GLchar* tess_shader_source);
+	GLuint CompileShaders(const GLchar* vertex_shader_source , const GLchar* fragment_shader_source, const GLchar* tess_shader_source, const GLchar* tesse_shader_source);
 	std::string GetShader(const char* fileName);
 
 private:

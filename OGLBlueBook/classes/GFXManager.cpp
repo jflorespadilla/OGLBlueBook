@@ -38,10 +38,12 @@ void GFXManager::Start() {
 
         std::string FS_Source =  GetShader("shaders/fs.shader");
 
-        std::string TS_Source = GetShader("shaders/ts.shader");
+        std::string TCS_Source = GetShader("shaders/tcs.shader");
+
+        std::string TES_Source = GetShader("shaders/tes.shader");
 
         // TODO - Rework this portion. I need to make it easier to feed different types of shaders to one compile shader function.
-        m_rendering_program = CompileShaders(VS_Source.c_str(), FS_Source.c_str(), TS_Source.c_str());
+        m_rendering_program = CompileShaders(VS_Source.c_str(), FS_Source.c_str(), TCS_Source.c_str(), TES_Source.c_str());
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
     }
@@ -59,10 +61,12 @@ void GFXManager::Run() {
     }
 }
 
-GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLchar* fragment_shader_source, const GLchar* tess_shader_source) {
+GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLchar* fragment_shader_source, const GLchar* tessc_shader_source, const GLchar* tesse_shader_source) {
+    // TODO - Rework this function to work with an array of strings and find a way to choose the correct shader type to create 
     GLuint vertex_shader;
     GLuint fragment_shader;
-    GLuint tess_shader;
+    GLuint tessc_shader;
+    GLuint tesse_shader;
     GLuint program;
 
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -73,9 +77,13 @@ GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLch
     glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
     glCompileShader(fragment_shader);
 
-    tess_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
-    glShaderSource(tess_shader, 1, &tess_shader_source, NULL);
-    glCompileShader(tess_shader);
+    tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
+    glShaderSource(tessc_shader, 1, &tessc_shader_source, NULL);
+    glCompileShader(tessc_shader);
+
+    tesse_shader = glCreateShader(GL_TESS_EVALUATION_SHADER);
+    glShaderSource(tesse_shader, 1, &tesse_shader_source, NULL);
+    glCompileShader(tesse_shader);
 
     program = glCreateProgram();
     glAttachShader(program, vertex_shader);
@@ -115,5 +123,6 @@ void GFXManager::Renderer(float dt) {
 
     GLfloat attrib[] = { (float)sin(dt) * 0.5f , (float)cos(dt) * 0.6f, 0.0f, 0.0f };
     glVertexAttrib4fv(0, attrib);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
