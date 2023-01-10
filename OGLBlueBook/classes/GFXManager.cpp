@@ -105,6 +105,48 @@ GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLch
 
     return program;
 }
+// **************************** New Compile Shaders Function*************************************************
+GLuint CompileShaders(std::string* shaders) {
+    GLuint vertex_shader;
+    GLuint fragment_shader;
+    GLuint tessc_shader;
+    GLuint tesse_shader;
+    GLuint geo_shader;
+    GLuint program;
+
+    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
+    glCompileShader(vertex_shader);
+
+    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
+    glCompileShader(fragment_shader);
+
+    tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
+    glShaderSource(tessc_shader, 1, &tessc_shader_source, NULL);
+    glCompileShader(tessc_shader);
+
+    tesse_shader = glCreateShader(GL_TESS_EVALUATION_SHADER);
+    glShaderSource(tesse_shader, 1, &tesse_shader_source, NULL);
+    glCompileShader(tesse_shader);
+
+    geo_shader = glCreateShader(GL_GEOMETRY_SHADER);
+    glShaderSource(geo_shader, 1, &geo_shader_source, NULL);
+    glCompileShader(geo_shader);
+
+    program = glCreateProgram();
+    glAttachShader(program, vertex_shader);
+    glAttachShader(program, fragment_shader);
+    glLinkProgram(program);
+
+    glDeleteShader(vertex_shader);
+    glDeleteShader(fragment_shader);
+    glDeleteShader(tessc_shader);
+    glDeleteShader(tesse_shader);
+    glDeleteShader(geo_shader);
+
+    return program;
+}
 
 std::string GFXManager::GetShader(const char* filePath) {
     std::fstream fileStream;
