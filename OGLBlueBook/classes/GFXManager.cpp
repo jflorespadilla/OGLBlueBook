@@ -32,20 +32,20 @@ GFXManager::~GFXManager() {
 
 void GFXManager::Start() {
     if (!m_glfwFlag) {
-
+        std::string shaderSources[5];
         // Need to make a getter function for shaders. This works for now.
-        std::string VS_Source = GetShader("shaders/vs.shader");
+        shaderSources[0] = GetShader("shaders/vs.shader");
 
-        std::string FS_Source =  GetShader("shaders/fs.shader");
+        shaderSources[1] = GetShader("shaders/fs.shader");
 
-        std::string TCS_Source = GetShader("shaders/tcs.shader");
+        shaderSources[2] = GetShader("shaders/tcs.shader");
 
-        std::string TES_Source = GetShader("shaders/tes.shader");
+        shaderSources[3] = GetShader("shaders/tes.shader");
 
-        std::string GEO_Source = GetShader("shaders/geo.shader");
+        shaderSources[4] = GetShader("shaders/geo.shader");
 
         // TODO - Rework this portion. I need to make it easier to feed different types of shaders to one compile shader function.
-        m_rendering_program = CompileShaders(VS_Source.c_str(), FS_Source.c_str(), TCS_Source.c_str(), TES_Source.c_str(), GEO_Source.c_str());
+        m_rendering_program = CompileShaders(shaderSources);
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
     }
@@ -63,14 +63,19 @@ void GFXManager::Run() {
     }
 }
 
-GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLchar* fragment_shader_source, const GLchar* tessc_shader_source, const GLchar* tesse_shader_source, const GLchar* geo_shader_source) {
-    // TODO - Rework this function to work with an array of strings and find a way to choose the correct shader type to create 
+GLuint GFXManager::CompileShaders(std::string* shaders) {
     GLuint vertex_shader;
     GLuint fragment_shader;
     GLuint tessc_shader;
     GLuint tesse_shader;
     GLuint geo_shader;
     GLuint program;
+
+    const GLchar* vertex_shader_source = shaders[0].c_str();
+    const GLchar* fragment_shader_source = shaders[1].c_str();
+    const GLchar* tcs_shader_source = shaders[2].c_str();
+    const GLchar* tes_shader_source = shaders[3].c_str();
+    const GLchar* geo_shader_source = shaders[4].c_str();
 
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
@@ -81,53 +86,11 @@ GLuint GFXManager::CompileShaders(const GLchar* vertex_shader_source, const GLch
     glCompileShader(fragment_shader);
 
     tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
-    glShaderSource(tessc_shader, 1, &tessc_shader_source, NULL);
+    glShaderSource(tessc_shader, 1, &tcs_shader_source, NULL);
     glCompileShader(tessc_shader);
 
     tesse_shader = glCreateShader(GL_TESS_EVALUATION_SHADER);
-    glShaderSource(tesse_shader, 1, &tesse_shader_source, NULL);
-    glCompileShader(tesse_shader);
-
-    geo_shader = glCreateShader(GL_GEOMETRY_SHADER);
-    glShaderSource(geo_shader, 1, &geo_shader_source, NULL);
-    glCompileShader(geo_shader);
-
-    program = glCreateProgram();
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
-    glLinkProgram(program);
-
-    glDeleteShader(vertex_shader);
-    glDeleteShader(fragment_shader);
-    glDeleteShader(tessc_shader);
-    glDeleteShader(tesse_shader);
-    glDeleteShader(geo_shader);
-
-    return program;
-}
-// **************************** New Compile Shaders Function*************************************************
-GLuint CompileShaders(std::string* shaders) {
-    GLuint vertex_shader;
-    GLuint fragment_shader;
-    GLuint tessc_shader;
-    GLuint tesse_shader;
-    GLuint geo_shader;
-    GLuint program;
-
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
-    glCompileShader(vertex_shader);
-
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
-    glCompileShader(fragment_shader);
-
-    tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
-    glShaderSource(tessc_shader, 1, &tessc_shader_source, NULL);
-    glCompileShader(tessc_shader);
-
-    tesse_shader = glCreateShader(GL_TESS_EVALUATION_SHADER);
-    glShaderSource(tesse_shader, 1, &tesse_shader_source, NULL);
+    glShaderSource(tesse_shader, 1, &tes_shader_source, NULL);
     glCompileShader(tesse_shader);
 
     geo_shader = glCreateShader(GL_GEOMETRY_SHADER);
