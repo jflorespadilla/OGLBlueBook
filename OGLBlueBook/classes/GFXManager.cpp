@@ -36,15 +36,14 @@ void GFXManager::Start() {
         // Need to make a getter function for shaders. This works for now.
         shaderSources[0] = GetShader("shaders/vs.shader");
 
-        shaderSources[1] = GetShader("shaders/fs.shader");
+        shaderSources[1] = GetShader("shaders/tcs.shader");
 
-        shaderSources[2] = GetShader("shaders/tcs.shader");
+        shaderSources[2] = GetShader("shaders/tes.shader");
 
-        shaderSources[3] = GetShader("shaders/tes.shader");
+        shaderSources[3] = GetShader("shaders/geo.shader");
 
-        shaderSources[4] = GetShader("shaders/geo.shader");
+        shaderSources[4] = GetShader("shaders/fs.shader");
 
-        // TODO - Rework this portion. I need to make it easier to feed different types of shaders to one compile shader function.
         m_rendering_program = CompileShaders(shaderSources);
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
@@ -72,18 +71,14 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
     GLuint program;
 
     const GLchar* vertex_shader_source = shaders[0].c_str();
-    const GLchar* fragment_shader_source = shaders[1].c_str();
-    const GLchar* tcs_shader_source = shaders[2].c_str();
-    const GLchar* tes_shader_source = shaders[3].c_str();
-    const GLchar* geo_shader_source = shaders[4].c_str();
+    const GLchar* tcs_shader_source = shaders[1].c_str();
+    const GLchar* tes_shader_source = shaders[2].c_str();
+    const GLchar* geo_shader_source = shaders[3].c_str();
+    const GLchar* fragment_shader_source = shaders[4].c_str();
 
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
     glCompileShader(vertex_shader);
-
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
-    glCompileShader(fragment_shader);
 
     tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
     glShaderSource(tessc_shader, 1, &tcs_shader_source, NULL);
@@ -97,8 +92,15 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
     glShaderSource(geo_shader, 1, &geo_shader_source, NULL);
     glCompileShader(geo_shader);
 
+    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
+    glCompileShader(fragment_shader);
+
     program = glCreateProgram();
     glAttachShader(program, vertex_shader);
+    glAttachShader(program, tessc_shader);
+    //glAttachShader(program, tesse_shader);
+    //glAttachShader(program, geo_shader);
     glAttachShader(program, fragment_shader);
     glLinkProgram(program);
 
@@ -138,6 +140,6 @@ void GFXManager::Renderer(float dt) {
 
     GLfloat attrib[] = { (float)sin(dt) * 0.5f , (float)cos(dt) * 0.6f, 0.0f, 0.0f };
     glVertexAttrib4fv(0, attrib);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
