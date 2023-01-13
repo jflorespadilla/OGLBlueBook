@@ -1,6 +1,6 @@
 #version 450 core
 
-layout(verticies = 3) out;
+layout(vertices = 3) out;
 
 void main(void) {
 	if (gl_InvocationID == 0) {
