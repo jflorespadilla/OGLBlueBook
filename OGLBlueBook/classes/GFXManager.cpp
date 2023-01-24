@@ -32,7 +32,7 @@ GFXManager::~GFXManager() {
 
 void GFXManager::Start() {
     if (!m_glfwFlag) {
-        std::string shaderSources[5];
+        std::string shaderSources[2];
         // Need to make a getter function for shaders. This works for now.
         shaderSources[0] = GetShader("shaders/vs.shader");
 

@@ -1,6 +1,7 @@
 #version 450 core
-//layout(location = 0) offset;
-//layout(location = 1) color;
+layout(location = 0) offset;
+layout(location = 1) color;
+
 out vec4 vs_color;
 
 void main (void) {
