@@ -130,6 +130,7 @@ std::string GFXManager::GetShader(const char* filePath) {
         }
         fileStream.close();
     }
+    std::cout << content << std::endl << std::endl;
     return content;
 }
 
