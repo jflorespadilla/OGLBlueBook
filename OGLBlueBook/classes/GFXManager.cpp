@@ -70,13 +70,14 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
     //GLuint geo_shader;
     GLuint program;
 
-    /* This is how it should work. Doing some debugging on this crap first. */
-    //const GLchar* vertex_shader_source = shaders[0].c_str();
+    const GLchar* vertex_shader_source = shaders[0].c_str();
     //const GLchar* tcs_shader_source = shaders[1].c_str();
     //const GLchar* tes_shader_source = shaders[2].c_str();
     //const GLchar* geo_shader_source = shaders[3].c_str();
-    //const GLchar* fragment_shader_source = shaders[1].c_str();
-    const GLchar* vertex_shader_source =
+    const GLchar* fragment_shader_source = shaders[1].c_str();
+
+
+    /*const GLchar* vertex_shader_source =
         "#version 450 core\n\n"
         "layout(location = 0) offset;\n"
         "layout(location = 1) color;\n\n"
@@ -98,8 +99,9 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
         "       cos(gl_FragCoord.y * 0.25) * 0.5 + 0.5,\n"
         "       sin(gl_FragCoord.x * 0.15) * cos(gl_FragCoord.y * 0.15),\n"
         "       1.0);\n"
-        "}";
+        "}";*/
 
+    // Logging to console for error checking
     std::cout << vertex_shader_source << std::endl << std::endl << fragment_shader_source << std::endl << std::endl;
 
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
