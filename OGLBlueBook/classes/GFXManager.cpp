@@ -102,7 +102,7 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
         "}";*/
 
     // Logging to console for error checking
-    std::cout << vertex_shader_source << std::endl << std::endl << fragment_shader_source << std::endl << std::endl;
+    // std::cout << vertex_shader_source << std::endl << std::endl << fragment_shader_source << std::endl << std::endl;
 
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
@@ -162,7 +162,7 @@ std::string GFXManager::GetShader(const char* filePath) {
 }
 
 void GFXManager::Renderer(float dt) {
-    const GLfloat BGcolor[] = { (float)sin(dt) * 0.5f + 0.5f, (float)cos(dt) * 0.5f + 0.5f, 0.0f, 1.0f};
+    const GLfloat BGcolor[] = { 0.0f, 0.2f, 0.0f, 1.0f }; //{ (float)sin(dt) * 0.5f + 0.5f, (float)cos(dt) * 0.5f + 0.5f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
 
@@ -170,5 +170,5 @@ void GFXManager::Renderer(float dt) {
     glVertexAttrib4fv(0, attrib);
     //glPatchParameteri(GL_PATCH_VERTICES, GL_MAX_PATCH_VERTICES);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_POINTS, 0, 1);
 }
