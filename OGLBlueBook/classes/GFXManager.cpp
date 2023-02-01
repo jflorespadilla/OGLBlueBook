@@ -108,6 +108,13 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
     glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
     glCompileShader(vertex_shader);
 
+    GLint success = 0;
+    glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
+
+    if (success == GL_FALSE) {
+        std::cout << "\n\n ******Shader Compilation Failed***** \n\n VERTEX \n\n";
+    }
+
     /*tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
     glShaderSource(tessc_shader, 1, &tcs_shader_source, NULL);
     glCompileShader(tessc_shader);*/
@@ -123,6 +130,13 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
     glCompileShader(fragment_shader);
+
+    success = 0;
+    glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
+
+    if (success == GL_FALSE) {
+        std::cout << "\n\n ******Shader Compilation Failed***** \n\n FRAGMENT \n\n";
+    }
 
     program = glCreateProgram();
     glAttachShader(program, vertex_shader);
