@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
 
 class GFXManager
 {
@@ -17,6 +18,8 @@ public:
 	std::string GetShader(const char* fileName);
 
 private:
+	void CheckShaderCompilation(GLuint& shader);
+
 	GLuint m_rendering_program;
 	GLuint m_vertex_array_object;
 	GLFWwindow* m_window;

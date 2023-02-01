@@ -94,6 +94,7 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
         "#version 450 core\n\n"
         "in vec4 vs_color;\n\n"
         "out vec4 color;\n\n"
+        "// comment\n"
         "void main(void) {\n\n"
         "   color = vec4(sin(gl_FragCoord.x * 0.25) * 0.5 + 0.5,\n"
         "       cos(gl_FragCoord.y * 0.25) * 0.5 + 0.5,\n"
@@ -107,13 +108,7 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
     glCompileShader(vertex_shader);
-
-    GLint success = 0;
-    glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-
-    if (success == GL_FALSE) {
-        std::cout << "\n\n ******Shader Compilation Failed***** \n\n VERTEX \n\n";
-    }
+    CheckShaderCompilation(vertex_shader);
 
     /*tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
     glShaderSource(tessc_shader, 1, &tcs_shader_source, NULL);
@@ -130,13 +125,7 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
     glCompileShader(fragment_shader);
-
-    success = 0;
-    glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-
-    if (success == GL_FALSE) {
-        std::cout << "\n\n ******Shader Compilation Failed***** \n\n FRAGMENT \n\n";
-    }
+    CheckShaderCompilation(fragment_shader);
 
     program = glCreateProgram();
     glAttachShader(program, vertex_shader);
@@ -153,6 +142,23 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
     //glDeleteShader(geo_shader);
 
     return program;
+}
+
+void GFXManager::CheckShaderCompilation(GLuint& shader) {
+    GLint success = 0;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+
+    if (success == GL_FALSE) {
+        GLint maxLength = 0;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+        // The maxLength includes the NULL character
+        std::vector<GLchar> errorLog(maxLength);
+        glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
+        for (int i = 0; i < maxLength; i++) {
+            std::cout << errorLog[i];
+        }
+    }
 }
 
 std::string GFXManager::GetShader(const char* filePath) {
@@ -176,12 +182,12 @@ std::string GFXManager::GetShader(const char* filePath) {
 }
 
 void GFXManager::Renderer(float dt) {
-    const GLfloat BGcolor[] = { 0.0f, 0.2f, 0.0f, 1.0f }; //{ (float)sin(dt) * 0.5f + 0.5f, (float)cos(dt) * 0.5f + 0.5f, 0.0f, 1.0f};
+    const GLfloat BGcolor[] = { (float)sin(dt) * 0.5f + 0.5f, (float)cos(dt) * 0.5f + 0.5f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
 
-    //GLfloat attrib[] = { (float)sin(dt) * 0.5f , (float)cos(dt) * 0.6f, 0.0f, 0.0f };
-    //glVertexAttrib4fv(0, attrib);
+    GLfloat attrib[] = { (float)sin(dt) * 0.5f , (float)cos(dt) * 0.6f, 0.0f, 0.0f };
+    glVertexAttrib4fv(0, attrib);
     //glPatchParameteri(GL_PATCH_VERTICES, GL_MAX_PATCH_VERTICES);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDrawArrays(GL_TRIANGLES, 0, 3);
