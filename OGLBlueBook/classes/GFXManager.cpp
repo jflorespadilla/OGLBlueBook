@@ -76,35 +76,6 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
     //const GLchar* geo_shader_source = shaders[3].c_str();
     const GLchar* fragment_shader_source = shaders[1].c_str();
 
-
-    /*const GLchar* vertex_shader_source =
-        "#version 450 core\n\n"
-        "layout(location = 0) offset;\n"
-        "layout(location = 1) color;\n\n"
-        "out vec4 vs_color;\n\n"
-        "void main(void) {\n\n"
-        "    const vec4 vertices[3] = vec4[3](vec4(0.25, -0.25, 0.5, 1.0),\n"
-        "        vec4(-0.25, -0.25, 0.5, 1.0),\n"
-        "        vec4(0.25, 0.25, 0.5, 1.0));\n\n"
-        "    gl_Position = vertices[gl_VertexID] + offset;\n\n"
-        "    vs_color = color[gl_VertexID];\n"
-        "};";
-
-    const GLchar* fragment_shader_source =
-        "#version 450 core\n\n"
-        "in vec4 vs_color;\n\n"
-        "out vec4 color;\n\n"
-        "// comment\n"
-        "void main(void) {\n\n"
-        "   color = vec4(sin(gl_FragCoord.x * 0.25) * 0.5 + 0.5,\n"
-        "       cos(gl_FragCoord.y * 0.25) * 0.5 + 0.5,\n"
-        "       sin(gl_FragCoord.x * 0.15) * cos(gl_FragCoord.y * 0.15),\n"
-        "       1.0);\n"
-        "}";*/
-
-    // Logging to console for error checking
-    // std::cout << vertex_shader_source << std::endl << std::endl << fragment_shader_source << std::endl << std::endl;
-
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
     glCompileShader(vertex_shader);
