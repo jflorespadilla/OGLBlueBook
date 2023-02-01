@@ -170,5 +170,5 @@ void GFXManager::Renderer(float dt) {
     glVertexAttrib4fv(0, attrib);
     //glPatchParameteri(GL_PATCH_VERTICES, GL_MAX_PATCH_VERTICES);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glDrawArrays(GL_POINTS, 0, 1);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 }
