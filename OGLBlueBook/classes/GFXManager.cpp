@@ -159,7 +159,5 @@ void GFXManager::Renderer(float dt) {
 
     GLfloat attrib[] = { (float)sin(dt) * 0.5f , (float)cos(dt) * 0.6f, 0.0f, 0.0f };
     glVertexAttrib4fv(0, attrib);
-    //glPatchParameteri(GL_PATCH_VERTICES, GL_MAX_PATCH_VERTICES);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
