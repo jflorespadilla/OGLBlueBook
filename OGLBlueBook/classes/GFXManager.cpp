@@ -70,6 +70,8 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
     //GLuint geo_shader;
     GLuint program;
 
+    // see if I can split this function up into two pieces
+
     const GLchar* vertex_shader_source = shaders[0].c_str();
     //const GLchar* tcs_shader_source = shaders[1].c_str();
     //const GLchar* tes_shader_source = shaders[2].c_str();
