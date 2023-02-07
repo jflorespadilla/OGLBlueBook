@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <glm/glm.hpp>
 
 class GFXManager
 {
