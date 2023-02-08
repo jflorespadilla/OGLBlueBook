@@ -32,8 +32,9 @@ GFXManager::~GFXManager() {
 
 void GFXManager::Start() {
     if (!m_glfwFlag) {
+        // use a vector instead 
         std::string shaderSources[2];
-        // Need to make a getter function for shaders. This works for now.
+
         shaderSources[0] = GetShader("shaders/vs.shader");
 
         //shaderSources[1] = GetShader("shaders/tcs.shader");
@@ -69,8 +70,6 @@ GLuint GFXManager::CompileShaders(std::string* shaders) {
     //GLuint tesse_shader;
     //GLuint geo_shader;
     GLuint program;
-
-    // see if I can split this function up into two pieces
 
     const GLchar* vertex_shader_source = shaders[0].c_str();
     //const GLchar* tcs_shader_source = shaders[1].c_str();
