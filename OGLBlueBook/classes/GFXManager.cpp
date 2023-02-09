@@ -34,16 +34,19 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         // use a vector instead 
         std::string shaderSources[2];
+        std::vector<std::string> shaderSrcs;
 
         shaderSources[0] = GetShader("shaders/vs.shader");
-
-        //shaderSources[1] = GetShader("shaders/tcs.shader");
+        // shaderSrcs.push_back(GetShader("shaders/vs.shader"));
+        // 
+        // shaderSources[1] = GetShader("shaders/tcs.shader");
 
         //shaderSources[2] = GetShader("shaders/tes.shader");
 
         //shaderSources[3] = GetShader("shaders/geo.shader");
 
         shaderSources[1] = GetShader("shaders/fs.shader");
+        // shaderSrcs.push_back(GetShader("shaders/vs.shader"));
 
         m_rendering_program = CompileShaders(shaderSources);
         glCreateVertexArrays(1, &m_vertex_array_object);
