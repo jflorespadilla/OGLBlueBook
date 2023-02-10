@@ -37,8 +37,8 @@ void GFXManager::Start() {
         std::vector<std::string> shaderSrcs;
 
         shaderSources[0] = GetShader("shaders/vs.shader");
-        // shaderSrcs.push_back(GetShader("shaders/vs.shader"));
-        // 
+        shaderSrcs.push_back(GetShader("shaders/vs.shader"));
+        
         // shaderSources[1] = GetShader("shaders/tcs.shader");
 
         //shaderSources[2] = GetShader("shaders/tes.shader");
@@ -46,7 +46,7 @@ void GFXManager::Start() {
         //shaderSources[3] = GetShader("shaders/geo.shader");
 
         shaderSources[1] = GetShader("shaders/fs.shader");
-        // shaderSrcs.push_back(GetShader("shaders/vs.shader"));
+        shaderSrcs.push_back(GetShader("shaders/vs.shader"));
 
         m_rendering_program = CompileShaders(shaderSources);
         glCreateVertexArrays(1, &m_vertex_array_object);
@@ -64,6 +64,97 @@ void GFXManager::Run() {
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
+}
+
+GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
+    GLuint vertex_shader;
+    GLuint fragment_shader;
+    GLuint tessc_shader;
+    GLuint tesse_shader;
+    GLuint geo_shader;
+    GLuint program;
+
+    program = glCreateProgram();
+
+    std::vector<std::string>::iterator shaderIt;
+    std::vector<std::string>::iterator lastElement = shaders.end() - 1;
+    int count = 0;
+
+    const GLchar* fragment_shader_source;
+    const GLchar* vertex_shader_source;
+    const GLchar* tcs_shader_source = NULL;
+    const GLchar* tes_shader_source = NULL;
+    const GLchar* geo_shader_source = NULL;
+
+    for (shaderIt = shaders.begin(); shaderIt != shaders.end(); shaderIt++) {
+        if (count > 0 && shaderIt != lastElement) {
+            if (count == 1) {
+                tcs_shader_source = shaderIt->c_str();
+            }
+            if (count == 2) {
+                tes_shader_source = shaderIt->c_str();
+            }
+            if (count == 3) {
+                geo_shader_source = shaderIt->c_str();
+            }
+        }
+        if (shaderIt == lastElement) {
+            vertex_shader_source = shaderIt->c_str();
+        }
+        if (count == 0) {
+            fragment_shader_source = shaderIt->c_str();
+        }
+        count++;
+    }
+
+    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
+    glCompileShader(vertex_shader);
+    CheckShaderCompilation(vertex_shader);
+    glAttachShader(program, vertex_shader);
+
+    if (tcs_shader_source != NULL) {
+        tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
+        glShaderSource(tessc_shader, 1, &tcs_shader_source, NULL);
+        glCompileShader(tessc_shader);
+        glAttachShader(program, tessc_shader);
+    }
+
+    if (tes_shader_source != NULL) {
+        tesse_shader = glCreateShader(GL_TESS_EVALUATION_SHADER);
+        glShaderSource(tesse_shader, 1, &tes_shader_source, NULL);
+        glCompileShader(tesse_shader);
+        glAttachShader(program, tesse_shader);
+    }
+
+    if (geo_shader_source != NULL) {
+        geo_shader = glCreateShader(GL_GEOMETRY_SHADER);
+        glShaderSource(geo_shader, 1, &geo_shader_source, NULL);
+        glCompileShader(geo_shader);
+        glAttachShader(program, geo_shader);
+    }
+
+    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
+    glCompileShader(fragment_shader);
+    CheckShaderCompilation(fragment_shader);
+    glAttachShader(program, fragment_shader);
+
+    glLinkProgram(program);
+
+    glDeleteShader(vertex_shader);
+    glDeleteShader(fragment_shader);
+    if (tcs_shader_source != NULL) {
+        glDeleteShader(tessc_shader);
+    }
+    if (tes_shader_source != NULL) {
+        glDeleteShader(tesse_shader);
+    }
+    if (tcs_shader_source != NULL) {
+        glDeleteShader(geo_shader);
+    }
+
+    return program;
 }
 
 GLuint GFXManager::CompileShaders(std::string* shaders) {

@@ -17,6 +17,7 @@ public:
 	void Renderer(float dt);
 	GLuint CompileShaders(std::string* shaders);
 	std::string GetShader(const char* fileName);
+	GLuint CompileShaders(std::vector<std::string>& shaders);
 
 private:
 	void CheckShaderCompilation(GLuint& shader);
