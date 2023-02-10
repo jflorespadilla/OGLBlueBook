@@ -36,7 +36,7 @@ void GFXManager::Start() {
         std::string shaderSources[2];
         std::vector<std::string> shaderSrcs;
 
-        shaderSources[0] = GetShader("shaders/vs.shader");
+        //shaderSources[0] = GetShader("shaders/vs.shader");
         shaderSrcs.push_back(GetShader("shaders/vs.shader"));
         
         // shaderSources[1] = GetShader("shaders/tcs.shader");
@@ -45,10 +45,10 @@ void GFXManager::Start() {
 
         //shaderSources[3] = GetShader("shaders/geo.shader");
 
-        shaderSources[1] = GetShader("shaders/fs.shader");
-        shaderSrcs.push_back(GetShader("shaders/vs.shader"));
+        //shaderSources[1] = GetShader("shaders/fs.shader");
+        shaderSrcs.push_back(GetShader("shaders/fs.shader"));
 
-        m_rendering_program = CompileShaders(shaderSources);
+        m_rendering_program = CompileShaders(shaderSrcs);
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
     }
@@ -98,10 +98,10 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
                 geo_shader_source = shaderIt->c_str();
             }
         }
-        if (shaderIt == lastElement) {
+        if (count == 0) {
             vertex_shader_source = shaderIt->c_str();
         }
-        if (count == 0) {
+        if (shaderIt == lastElement) {
             fragment_shader_source = shaderIt->c_str();
         }
         count++;
