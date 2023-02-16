@@ -161,7 +161,6 @@ void GFXManager::CheckShaderCompilation(GLuint& shader) {
         GLint maxLength = 0;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
 
-        // The maxLength includes the NULL character
         std::vector<GLchar> errorLog(maxLength);
         glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
         for (int i = 0; i < maxLength; i++) {
