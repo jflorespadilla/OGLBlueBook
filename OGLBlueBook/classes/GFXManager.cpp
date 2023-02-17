@@ -36,11 +36,11 @@ void GFXManager::Start() {
 
         shaderSrcs.push_back(GetShader("shaders/vs.shader"));
         
-        // shaderSources[1] = GetShader("shaders/tcs.shader");
+        //shaderSrcs.push_back(GetShader("shaders/tcs.shader"));
 
-        //shaderSources[2] = GetShader("shaders/tes.shader");
+        //shaderSrcs.push_back(GetShader("shaders/tes.shader"));
 
-        //shaderSources[3] = GetShader("shaders/geo.shader");
+        //shaderSrcs.push_back(GetShader("shaders/geo.shader"));
 
         shaderSrcs.push_back(GetShader("shaders/fs.shader"));
 
