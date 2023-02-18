@@ -113,6 +113,7 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
         tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
         glShaderSource(tessc_shader, 1, &tcs_shader_source, NULL);
         glCompileShader(tessc_shader);
+        CheckShaderCompilation(tessc_shader);
         glAttachShader(program, tessc_shader);
     }
 
@@ -120,6 +121,7 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
         tesse_shader = glCreateShader(GL_TESS_EVALUATION_SHADER);
         glShaderSource(tesse_shader, 1, &tes_shader_source, NULL);
         glCompileShader(tesse_shader);
+        CheckShaderCompilation(tesse_shader);
         glAttachShader(program, tesse_shader);
     }
 
@@ -127,6 +129,7 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
         geo_shader = glCreateShader(GL_GEOMETRY_SHADER);
         glShaderSource(geo_shader, 1, &geo_shader_source, NULL);
         glCompileShader(geo_shader);
+        CheckShaderCompilation(geo_shader);
         glAttachShader(program, geo_shader);
     }
 
@@ -146,7 +149,7 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
     if (tes_shader_source != NULL) {
         glDeleteShader(tesse_shader);
     }
-    if (tcs_shader_source != NULL) {
+    if (geo_shader_source != NULL) {
         glDeleteShader(geo_shader);
     }
 
@@ -166,6 +169,9 @@ void GFXManager::CheckShaderCompilation(GLuint& shader) {
         for (int i = 0; i < maxLength; i++) {
             std::cout << errorLog[i];
         }
+    }
+    else {
+        std::cout << "Success!!!\n\n";
     }
 }
 
