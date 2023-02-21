@@ -76,12 +76,13 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
     std::vector<std::string>::iterator lastElement = shaders.end() - 1;
     int count = 0;
 
-    const GLchar* fragment_shader_source;
-    const GLchar* vertex_shader_source;
+    const GLchar* fragment_shader_source;   // vertex and fragment shaders are the only two required shaders
+    const GLchar* vertex_shader_source;        // everything else is optional.
     const GLchar* tcs_shader_source = NULL;
     const GLchar* tes_shader_source = NULL;
     const GLchar* geo_shader_source = NULL;
 
+    // Did this to get some STL practice in, but it stills seems hacky. Need to look into improving this somehow.
     for (shaderIt = shaders.begin(); shaderIt != shaders.end(); shaderIt++) {
         if (count > 0 && shaderIt != lastElement) {
             if (count == 1) {
@@ -176,6 +177,8 @@ void GFXManager::CheckShaderCompilation(GLuint& shader) {
 }
 
 std::string GFXManager::GetShader(const char* filePath) {
+    // I should really consider refactoring this in a way that will return a bool instead
+    // This would help out in error checking and dynamically loaded shaders down the line
     std::fstream fileStream;
     std::string line;
     std::string content;
