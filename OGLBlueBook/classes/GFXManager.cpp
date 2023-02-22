@@ -34,15 +34,15 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         std::vector<std::string> shaderSrcs;
 
-        shaderSrcs.push_back(GetShader("shaders/vs.shader"));
+        GetShader("shaders/vs.shader", shaderSrcs);
         
-        //shaderSrcs.push_back(GetShader("shaders/tcs.shader"));
+        GetShader("shaders/tcs.shader-n", shaderSrcs);
 
-        //shaderSrcs.push_back(GetShader("shaders/tes.shader"));
+        GetShader("shaders/tes.shader-n", shaderSrcs);
 
-        //shaderSrcs.push_back(GetShader("shaders/geo.shader"));
+        GetShader("shaders/geo.shader-n", shaderSrcs);
 
-        shaderSrcs.push_back(GetShader("shaders/fs.shader"));
+        GetShader("shaders/fs.shader", shaderSrcs);
 
         m_rendering_program = CompileShaders(shaderSrcs);
         glCreateVertexArrays(1, &m_vertex_array_object);
@@ -176,9 +176,7 @@ void GFXManager::CheckShaderCompilation(GLuint& shader) {
     }
 }
 
-std::string GFXManager::GetShader(const char* filePath) {
-    // I should really consider refactoring this in a way that will return a bool instead
-    // This would help out in error checking and dynamically loaded shaders down the line
+bool GFXManager::GetShader(const char* filePath, std::vector<std::string>& ShaderList) {
     std::fstream fileStream;
     std::string line;
     std::string content;
@@ -194,8 +192,11 @@ std::string GFXManager::GetShader(const char* filePath) {
             }
         }
         fileStream.close();
+        ShaderList.push_back(content);
+        return true;
     }
-    return content;
+    std::cout << "\n\n" << filePath << " not found.\n\n\n";
+    return false;
 }
 
 void GFXManager::Renderer(float dt) {
