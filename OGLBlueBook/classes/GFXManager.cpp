@@ -34,6 +34,7 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         std::vector<std::string> shaderSrcs;
 
+        // Potentially add class boolean variables for each shader type?
         GetShader("shaders/vs.shader", shaderSrcs);
         
         GetShader("shaders/tcs.shader-n", shaderSrcs);
