@@ -34,16 +34,15 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         std::vector<std::string> shaderSrcs;
 
-        // Potentially add class boolean variables for each shader type?
-        GetShader("shaders/vs.shader", shaderSrcs);
+        activeShaders["Vertex"] = GetShader("shaders/vs.shader", shaderSrcs);
         
-        GetShader("shaders/tcs.shader-n", shaderSrcs);
+        activeShaders["Tess Control"] = GetShader("shaders/tcs.shader-n", shaderSrcs);
 
-        GetShader("shaders/tes.shader-n", shaderSrcs);
+        activeShaders["Tess"] = GetShader("shaders/tes.shader-n", shaderSrcs);
 
-        GetShader("shaders/geo.shader-n", shaderSrcs);
+        activeShaders["Geo"] = GetShader("shaders/geo.shader-n", shaderSrcs);
 
-        GetShader("shaders/fs.shader", shaderSrcs);
+        activeShaders["Fragment"] = GetShader("shaders/fs.shader", shaderSrcs);
 
         m_rendering_program = CompileShaders(shaderSrcs);
         glCreateVertexArrays(1, &m_vertex_array_object);
@@ -73,9 +72,7 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
 
     program = glCreateProgram();
 
-    std::vector<std::string>::iterator shaderIt;
-    std::vector<std::string>::iterator lastElement = shaders.end() - 1;
-    int count = 0;
+    std::vector<std::string>::iterator shaderIt = shaders.begin();
 
     const GLchar* fragment_shader_source;   // vertex and fragment shaders are the only two required shaders
     const GLchar* vertex_shader_source;        // everything else is optional.
@@ -83,27 +80,21 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
     const GLchar* tes_shader_source = NULL;
     const GLchar* geo_shader_source = NULL;
 
-    // Did this to get some STL practice in, but it stills seems hacky. Need to look into improving this somehow.
-    for (shaderIt = shaders.begin(); shaderIt != shaders.end(); shaderIt++) {
-        if (count > 0 && shaderIt != lastElement) {
-            if (count == 1) {
-                tcs_shader_source = shaderIt->c_str();
-            }
-            if (count == 2) {
-                tes_shader_source = shaderIt->c_str();
-            }
-            if (count == 3) {
-                geo_shader_source = shaderIt->c_str();
-            }
-        }
-        if (count == 0) {
-            vertex_shader_source = shaderIt->c_str();
-        }
-        if (shaderIt == lastElement) {
-            fragment_shader_source = shaderIt->c_str();
-        }
-        count++;
+    vertex_shader_source = shaderIt->c_str();
+    shaderIt++;
+    if (activeShaders["Tess Control"]) {
+        tcs_shader_source = shaderIt->c_str();
+        shaderIt++;
     }
+    if (activeShaders["Tess"]) {
+        tes_shader_source = shaderIt->c_str();
+        shaderIt++;
+    }
+    if (activeShaders["Geo"]) {
+        geo_shader_source = shaderIt->c_str();
+        shaderIt++;
+    }
+    fragment_shader_source = shaderIt->c_str();
 
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
@@ -111,7 +102,7 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
     CheckShaderCompilation(vertex_shader);
     glAttachShader(program, vertex_shader);
 
-    if (tcs_shader_source != NULL) {
+    if (activeShaders["Tess Control"]) {
         tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
         glShaderSource(tessc_shader, 1, &tcs_shader_source, NULL);
         glCompileShader(tessc_shader);
@@ -119,7 +110,7 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
         glAttachShader(program, tessc_shader);
     }
 
-    if (tes_shader_source != NULL) {
+    if (activeShaders["Tess"]) {
         tesse_shader = glCreateShader(GL_TESS_EVALUATION_SHADER);
         glShaderSource(tesse_shader, 1, &tes_shader_source, NULL);
         glCompileShader(tesse_shader);
@@ -127,7 +118,7 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
         glAttachShader(program, tesse_shader);
     }
 
-    if (geo_shader_source != NULL) {
+    if (activeShaders["Geo"]) {
         geo_shader = glCreateShader(GL_GEOMETRY_SHADER);
         glShaderSource(geo_shader, 1, &geo_shader_source, NULL);
         glCompileShader(geo_shader);
@@ -145,13 +136,13 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
 
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
-    if (tcs_shader_source != NULL) {
+    if (activeShaders["Tess Control"]) {
         glDeleteShader(tessc_shader);
     }
-    if (tes_shader_source != NULL) {
+    if (activeShaders["Tess"]) {
         glDeleteShader(tesse_shader);
     }
-    if (geo_shader_source != NULL) {
+    if (activeShaders["Geo"]) {
         glDeleteShader(geo_shader);
     }
 

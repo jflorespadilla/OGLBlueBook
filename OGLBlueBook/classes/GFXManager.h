@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <string>
+#include <unordered_map>
 #include <fstream>
 #include <vector>
 #include <glm/glm.hpp>
@@ -23,6 +24,7 @@ private:
 
 	GLuint m_rendering_program;
 	GLuint m_vertex_array_object;
+	std::unordered_map<std::string, bool> activeShaders;
 	GLFWwindow* m_window;
 
 	bool m_glfwFlag;
