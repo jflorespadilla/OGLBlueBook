@@ -192,8 +192,6 @@ bool GFXManager::GetShader(const char* filePath, std::vector<std::string>& Shade
 }
 
 void GFXManager::Renderer(float dt) {
-    // Start using 3D math here
-
     const GLfloat BGcolor[] = { (float)sin(dt) * 0.5f + 0.5f, (float)cos(dt) * 0.5f + 0.5f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
