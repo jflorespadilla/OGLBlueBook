@@ -19,6 +19,8 @@ public:
 	bool GetShader(const char* fileName, std::vector<std::string>& ShaderList);
 	GLuint CompileShaders(std::vector<std::string>& shaders);
 
+	// Create camera matricies - consider making camera it's own class
+
 private:
 	void CheckShaderCompilation(GLuint& shader);
 
