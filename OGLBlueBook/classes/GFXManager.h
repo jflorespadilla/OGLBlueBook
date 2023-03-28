@@ -7,6 +7,7 @@
 #include <fstream>
 #include <vector>
 #include <glm/glm.hpp>
+#include<glm/gtc/matrix_transform.hpp>
 
 class GFXManager
 {
@@ -30,6 +31,9 @@ private:
 
 	bool m_glfwFlag;
 
+	// Model should happen sparately elsewhere
 	glm::mat4 m_camera;
+	glm::mat4 m_projection;
+
 };
 
