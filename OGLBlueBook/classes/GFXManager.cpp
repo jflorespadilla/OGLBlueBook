@@ -178,20 +178,15 @@ void GFXManager::CheckShaderCompilation(GLuint& shader) {
 bool GFXManager::GetShader(const char* filePath, std::vector<std::string>& ShaderList) {
     std::fstream fileStream;
     std::string line;
-    std::string content;
+    std::stringstream content;
 
     fileStream.open(filePath, std::ios::in);
     if (fileStream.is_open()) {
         while (std::getline(fileStream, line)) {
-            if (line.length() == 0) {
-                content.append("\n");
-            }
-            else {
-                content.append(line);
-            }
+            content << line << "\n";
         }
         fileStream.close();
-        ShaderList.push_back(content);
+        ShaderList.push_back(content.str());
         return true;
     }
     std::cout << "\n\n" << filePath << " not found.\n\n\n";
