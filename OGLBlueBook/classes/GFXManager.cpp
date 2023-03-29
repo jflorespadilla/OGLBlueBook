@@ -69,6 +69,7 @@ void GFXManager::Run() {
     }
 }
 
+// I should really condiser reworking this function. It does a little bit to much and the return value makes little sense.
 GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
     GLuint vertex_shader;
     GLuint fragment_shader;
