@@ -10,6 +10,10 @@ m_glfwFlag(false)
         m_glfwFlag = true;
     }
 
+    // Adding window hints for clarity
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     m_window = glfwCreateWindow(640, 480, "Hola", NULL, NULL);
     if (!m_window) {
         glfwTerminate();
