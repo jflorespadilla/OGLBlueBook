@@ -69,7 +69,7 @@ void GFXManager::Run() {
     }
 }
 
-// I should really condiser reworking this function. It does a little bit to much and the return value makes little sense.
+// I should really consider reworking this function. It does a little bit too much and the return value makes little sense.
 GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
     GLuint vertex_shader;
     GLuint fragment_shader;
@@ -157,6 +157,7 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
     return program;
 }
 
+// Might need to rework this in a way that takes advantage of a shader class instaed
 void GFXManager::CheckShaderCompilation(GLuint& shader) {
     GLint success = 0;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -176,6 +177,7 @@ void GFXManager::CheckShaderCompilation(GLuint& shader) {
     }
 }
 
+// Consider reworking this function using some sort of shader class that takes care of this logic
 bool GFXManager::GetShader(const char* filePath, std::vector<std::string>& ShaderList) {
     std::fstream fileStream;
     std::string line;
