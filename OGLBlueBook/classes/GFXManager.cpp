@@ -82,8 +82,8 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
 
     std::vector<std::string>::iterator shaderIt = shaders.begin();
 
-    const GLchar* fragment_shader_source;   // vertex and fragment shaders are the only two required shaders
-    const GLchar* vertex_shader_source;        // everything else is optional.
+    const GLchar* fragment_shader_source;
+    const GLchar* vertex_shader_source;
     const GLchar* tcs_shader_source = NULL;
     const GLchar* tes_shader_source = NULL;
     const GLchar* geo_shader_source = NULL;
