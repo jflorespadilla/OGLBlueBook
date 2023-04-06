@@ -15,7 +15,7 @@ class Shader
 public:
 	Shader();
 	~Shader();
-	void CreateShader(std::string FilePath);
+	bool CreateShader(std::string FilePath);
 	void CompileShaders();
 
 private:
