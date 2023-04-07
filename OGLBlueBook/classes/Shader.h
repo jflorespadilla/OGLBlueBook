@@ -20,7 +20,7 @@ public:
 	void CompileShaders();
 
 private:
-	std::vector<std::string> ShaderSourceList;
+	std::unordered_map<ShaderType, std::string> ShaderSourceList;
 	std::vector<GLuint> CompiledShaders;
 };
 
