@@ -8,7 +8,7 @@ Shader::~Shader() {
 
 }
 
-bool Shader::CreateShader(std::string FilePath) {
+bool Shader::GetShaderSource(std::string FilePath) {
     std::fstream fileStream;
     std::string line;
     std::stringstream content;
@@ -24,7 +24,6 @@ bool Shader::CreateShader(std::string FilePath) {
     }
     std::cout << "\n\n" << FilePath << " not found.\n\n\n";
     return false;
-
 }
 
 void Shader::CompileShaders() {
