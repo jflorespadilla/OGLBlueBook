@@ -3,6 +3,7 @@
 Shader::Shader() {
 
 }
+//write second constructor
 
 Shader::~Shader() {
 
