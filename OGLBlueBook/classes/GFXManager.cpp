@@ -48,6 +48,12 @@ void GFXManager::Start() {
 
         activeShaders["Fragment"] = GetShader("shaders/fs.shader", shaderSrcs);
 
+        m_shaders.GetShaderSource("shaders/vs.shader");
+        m_shaders.GetShaderSource("shaders/fs.shader");
+        m_shaders.GetShaderSource("shaders/tcs.shader-n");
+        m_shaders.GetShaderSource("shaders/tes.shader-n");
+        m_shaders.GetShaderSource("shaders/geo.shader-n");
+
         m_rendering_program = CompileShaders(shaderSrcs);
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
@@ -77,6 +83,8 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
     GLuint tesse_shader;
     GLuint geo_shader;
     GLuint program;
+
+    m_shaders.CompileShaders();
 
     program = glCreateProgram();
 

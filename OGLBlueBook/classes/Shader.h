@@ -5,7 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <unordered_map>
-#include <gl/glew.h>
+#include <gl/gl3w.h>
 
 enum class ShaderType {
 	NONE = -1, VERTEX = 0, FRAGMENT = 1, TC = 2, T = 3, G = 4 

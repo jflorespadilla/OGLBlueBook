@@ -10,6 +10,8 @@
 #include <glm/glm.hpp>
 #include<glm/gtc/matrix_transform.hpp>
 
+#include "Shader.h"
+
 class GFXManager
 {
 public:
@@ -21,12 +23,12 @@ public:
 	bool GetShader(const char* fileName, std::vector<std::string>& ShaderList);
 	GLuint CompileShaders(std::vector<std::string>& shaders);
 
-
 private:
 	void CheckShaderCompilation(GLuint& shader);
 
 	GLuint m_rendering_program;
 	GLuint m_vertex_array_object;
+	Shader m_shaders;
 	std::unordered_map<std::string, bool> activeShaders;
 	GLFWwindow* m_window;
 

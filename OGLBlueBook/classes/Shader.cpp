@@ -43,12 +43,12 @@ bool Shader::GetShaderSource(std::string FilePath) {
         ShaderSourceList.insert(std::pair<ShaderType, std::string>(ST, content.str()));
         return true;
     }
-    std::cout << "\n\n" << FilePath << " not found.\n\n\n";
+    std::cout << "\n\n" << FilePath << " not found. Shader Class Report.\n\n\n";
     return false;
 }
 
 void Shader::CompileShaders() {
-    std::unordered_map<ShaderType, std::string>::iterator cursor = ShaderSourceList.begin();;
+    std::unordered_map<ShaderType, std::string>::iterator cursor = ShaderSourceList.begin();
     const GLchar* ShaderSource;
     GLuint shaderID = 0;
     ShaderType index;
