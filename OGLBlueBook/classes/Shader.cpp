@@ -48,5 +48,37 @@ bool Shader::GetShaderSource(std::string FilePath) {
 }
 
 void Shader::CompileShaders() {
-	// Stub
+    std::unordered_map<ShaderType, std::string>::iterator cursor = ShaderSourceList.begin();;
+    const GLchar* ShaderSource;
+    GLuint shaderID = 0;
+    ShaderType index;
+
+    for (cursor; cursor != ShaderSourceList.end(); cursor++) {
+        index = cursor->first;
+        ShaderSource = cursor->second.c_str();
+        
+        switch (index) {
+        case ShaderType::VERTEX:
+            shaderID = glCreateShader(GL_VERTEX_SHADER);
+            break;
+        case ShaderType::FRAGMENT:
+            shaderID = glCreateShader(GL_FRAGMENT_SHADER);
+            break;
+        case ShaderType::TC:
+            shaderID = glCreateShader(GL_TESS_CONTROL_SHADER);
+            break;
+        case ShaderType::T:
+            shaderID = glCreateShader(GL_TESS_EVALUATION_SHADER);
+            break;
+        case ShaderType::G:
+            shaderID = glCreateShader(GL_GEOMETRY_SHADER);
+            break;
+        }
+
+        glShaderSource(shaderID, 1, &ShaderSource, NULL);
+        glCompileShader(shaderID);
+        // Check compilation
+        CompiledShaders.emplace_back(shaderID);
+    }
+
 }
