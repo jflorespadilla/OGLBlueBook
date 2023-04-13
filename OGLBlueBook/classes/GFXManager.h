@@ -20,8 +20,7 @@ public:
 	void Start();
 	void Run();
 	void Renderer(float dt);
-	bool GetShader(const char* fileName, std::vector<std::string>& ShaderList);
-	GLuint CompileShaders(std::vector<std::string>& shaders);
+	GLuint CompileShaders();
 
 private:
 	void CheckShaderCompilation(GLuint& shader);

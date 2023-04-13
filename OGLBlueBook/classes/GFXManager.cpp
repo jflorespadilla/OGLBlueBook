@@ -36,25 +36,13 @@ GFXManager::~GFXManager() {
 
 void GFXManager::Start() {
     if (!m_glfwFlag) {
-        std::vector<std::string> shaderSrcs;
-
-        activeShaders["Vertex"] = GetShader("shaders/vs.shader", shaderSrcs);
-        
-        activeShaders["Tess Control"] = GetShader("shaders/tcs.shader-n", shaderSrcs);
-
-        activeShaders["Tess"] = GetShader("shaders/tes.shader-n", shaderSrcs);
-
-        activeShaders["Geo"] = GetShader("shaders/geo.shader-n", shaderSrcs);
-
-        activeShaders["Fragment"] = GetShader("shaders/fs.shader", shaderSrcs);
-
         m_shaders.GetShaderSource("shaders/vs.shader");
         m_shaders.GetShaderSource("shaders/fs.shader");
         m_shaders.GetShaderSource("shaders/tcs.shader-n");
         m_shaders.GetShaderSource("shaders/tes.shader-n");
         m_shaders.GetShaderSource("shaders/geo.shader-n");
 
-        m_rendering_program = CompileShaders(shaderSrcs);
+        m_rendering_program = CompileShaders();
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
 
@@ -76,7 +64,7 @@ void GFXManager::Run() {
 }
 
 // I should really consider reworking this function. It does a little bit too much and the return value makes little sense.
-GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
+GLuint GFXManager::CompileShaders() {
     GLuint vertex_shader;
     GLuint fragment_shader;
     GLuint tessc_shader;
@@ -88,37 +76,10 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
 
     program = glCreateProgram();
 
-    std::vector<std::string>::iterator shaderIt = shaders.begin();
-
-    const GLchar* fragment_shader_source;
-    const GLchar* vertex_shader_source;
-    const GLchar* tcs_shader_source = NULL;
-    const GLchar* tes_shader_source = NULL;
-    const GLchar* geo_shader_source = NULL;
-
-    vertex_shader_source = shaderIt->c_str();
-    shaderIt++;
-    if (activeShaders["Tess Control"]) {
-        tcs_shader_source = shaderIt->c_str();
-        shaderIt++;
-    }
-    if (activeShaders["Tess"]) {
-        tes_shader_source = shaderIt->c_str();
-        shaderIt++;
-    }
-    if (activeShaders["Geo"]) {
-        geo_shader_source = shaderIt->c_str();
-        shaderIt++;
-    }
-    fragment_shader_source = shaderIt->c_str();
-
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
-    glCompileShader(vertex_shader);
-    //CheckShaderCompilation(vertex_shader);
+    vertex_shader = m_shaders.GetShaderID(ShaderType::VERTEX);
     glAttachShader(program, vertex_shader);
 
-    if (activeShaders["Tess Control"]) {
+    /*if (activeShaders["Tess Control"]) {
         tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
         glShaderSource(tessc_shader, 1, &tcs_shader_source, NULL);
         glCompileShader(tessc_shader);
@@ -140,19 +101,16 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
         glCompileShader(geo_shader);
         //CheckShaderCompilation(geo_shader);
         glAttachShader(program, geo_shader);
-    }
+    }*/
 
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
-    glCompileShader(fragment_shader);
-    //CheckShaderCompilation(fragment_shader);
+    fragment_shader = m_shaders.GetShaderID(ShaderType::FRAGMENT);
     glAttachShader(program, fragment_shader);
 
     glLinkProgram(program);
 
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
-    if (activeShaders["Tess Control"]) {
+    /*if (activeShaders["Tess Control"]) {
         glDeleteShader(tessc_shader);
     }
     if (activeShaders["Tess"]) {
@@ -160,12 +118,12 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
     }
     if (activeShaders["Geo"]) {
         glDeleteShader(geo_shader);
-    }
+    }*/
 
     return program;
 }
 
-// Might need to rework this in a way that takes advantage of a shader class instaed
+// Might rename the function to something like GetGLLog or something
 void GFXManager::CheckShaderCompilation(GLuint& shader) {
     GLint success = 0;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -183,25 +141,6 @@ void GFXManager::CheckShaderCompilation(GLuint& shader) {
     else {
         std::cout << "Success!!!\n\n";
     }
-}
-
-// Consider reworking this function using some sort of shader class that takes care of this logic
-bool GFXManager::GetShader(const char* filePath, std::vector<std::string>& ShaderList) {
-    std::fstream fileStream;
-    std::string line;
-    std::stringstream content;
-
-    fileStream.open(filePath, std::ios::in);
-    if (fileStream.is_open()) {
-        while (std::getline(fileStream, line)) {
-            content << line << "\n";
-        }
-        fileStream.close();
-        ShaderList.push_back(content.str());
-        return true;
-    }
-    std::cout << "\n\n" << filePath << " not found.\n\n\n";
-    return false;
 }
 
 void GFXManager::Renderer(float dt) {

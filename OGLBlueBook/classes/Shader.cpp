@@ -87,13 +87,21 @@ void Shader::CompileShaders() {
             glShaderSource(shaderID, 1, &ShaderSource, NULL);
             glCompileShader(shaderID);
             if (CheckShaderCompilation(shaderID)) {
-                CompiledShaders.emplace_back(shaderID);
+                CompiledShaders[index] = shaderID;
             }
             else {
                 std::cout << "\nFailed to compile shader!!\n";
             }
         }
     }
+}
+
+GLuint Shader::GetShaderID(ShaderType shaderType) {
+    std::unordered_map<ShaderType, GLuint>::iterator searchResult = CompiledShaders.find(shaderType);
+    if (searchResult != CompiledShaders.end()) {
+        return searchResult->second;
+    }
+    return NULL;
 }
 
 GLuint Shader::CheckShaderCompilation(GLuint& shader) {

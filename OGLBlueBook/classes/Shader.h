@@ -18,12 +18,13 @@ public:
 	~Shader();
 	bool GetShaderSource(std::string FilePath);
 	void CompileShaders();
+	GLuint GetShaderID(ShaderType shaderType);
 
 
 private:
 	GLuint CheckShaderCompilation(GLuint& shader);
 
 	std::unordered_map<ShaderType, std::string> ShaderSourceList;
-	std::vector<GLuint> CompiledShaders;
+	std::unordered_map<ShaderType, GLuint> CompiledShaders;
 };
 
