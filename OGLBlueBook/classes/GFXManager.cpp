@@ -63,7 +63,7 @@ void GFXManager::Run() {
     }
 }
 
-// I should really consider reworking this function. It does a little bit too much and the return value makes little sense.
+// Rework this function to return void and have a separate "CreateProgram" function
 GLuint GFXManager::CompileShaders() {
     GLuint vertex_shader;
     GLuint fragment_shader;
