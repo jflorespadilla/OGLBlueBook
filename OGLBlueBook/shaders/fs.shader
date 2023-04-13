@@ -1,3 +1,4 @@
+#Shader fragment
 #version 450 core
 
 in vec4 vs_color;

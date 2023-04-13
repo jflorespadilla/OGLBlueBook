@@ -115,14 +115,14 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
     glCompileShader(vertex_shader);
-    CheckShaderCompilation(vertex_shader);
+    //CheckShaderCompilation(vertex_shader);
     glAttachShader(program, vertex_shader);
 
     if (activeShaders["Tess Control"]) {
         tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
         glShaderSource(tessc_shader, 1, &tcs_shader_source, NULL);
         glCompileShader(tessc_shader);
-        CheckShaderCompilation(tessc_shader);
+        //CheckShaderCompilation(tessc_shader);
         glAttachShader(program, tessc_shader);
     }
 
@@ -130,7 +130,7 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
         tesse_shader = glCreateShader(GL_TESS_EVALUATION_SHADER);
         glShaderSource(tesse_shader, 1, &tes_shader_source, NULL);
         glCompileShader(tesse_shader);
-        CheckShaderCompilation(tesse_shader);
+        //CheckShaderCompilation(tesse_shader);
         glAttachShader(program, tesse_shader);
     }
 
@@ -138,14 +138,14 @@ GLuint GFXManager::CompileShaders(std::vector<std::string>& shaders) {
         geo_shader = glCreateShader(GL_GEOMETRY_SHADER);
         glShaderSource(geo_shader, 1, &geo_shader_source, NULL);
         glCompileShader(geo_shader);
-        CheckShaderCompilation(geo_shader);
+        //CheckShaderCompilation(geo_shader);
         glAttachShader(program, geo_shader);
     }
 
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
     glCompileShader(fragment_shader);
-    CheckShaderCompilation(fragment_shader);
+    //CheckShaderCompilation(fragment_shader);
     glAttachShader(program, fragment_shader);
 
     glLinkProgram(program);
