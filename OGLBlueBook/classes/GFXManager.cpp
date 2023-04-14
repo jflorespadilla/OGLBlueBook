@@ -42,7 +42,7 @@ void GFXManager::Start() {
         m_shaders.GetShaderSource("shaders/tes.shader-n");
         m_shaders.GetShaderSource("shaders/geo.shader-n");
 
-        m_rendering_program = CompileShaders();
+        m_rendering_program = CreateDefaultProgram();
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
 
@@ -63,8 +63,7 @@ void GFXManager::Run() {
     }
 }
 
-// Rework this function to return void and have a separate "CreateProgram" function
-GLuint GFXManager::CompileShaders() {
+GLuint GFXManager::CreateDefaultProgram() {
     GLuint vertex_shader;
     GLuint fragment_shader;
     GLuint tessc_shader;
@@ -77,70 +76,50 @@ GLuint GFXManager::CompileShaders() {
     program = glCreateProgram();
 
     vertex_shader = m_shaders.GetShaderID(ShaderType::VERTEX);
-    glAttachShader(program, vertex_shader);
+    if (vertex_shader) {
+        glAttachShader(program, vertex_shader);
+    }
 
-    /*if (activeShaders["Tess Control"]) {
-        tessc_shader = glCreateShader(GL_TESS_CONTROL_SHADER);
-        glShaderSource(tessc_shader, 1, &tcs_shader_source, NULL);
-        glCompileShader(tessc_shader);
-        //CheckShaderCompilation(tessc_shader);
+    tessc_shader = m_shaders.GetShaderID(ShaderType::TC);
+    if (tessc_shader) {
         glAttachShader(program, tessc_shader);
     }
 
-    if (activeShaders["Tess"]) {
-        tesse_shader = glCreateShader(GL_TESS_EVALUATION_SHADER);
-        glShaderSource(tesse_shader, 1, &tes_shader_source, NULL);
-        glCompileShader(tesse_shader);
-        //CheckShaderCompilation(tesse_shader);
+    tesse_shader = m_shaders.GetShaderID(ShaderType::T);
+    if (tesse_shader) {
         glAttachShader(program, tesse_shader);
     }
 
-    if (activeShaders["Geo"]) {
-        geo_shader = glCreateShader(GL_GEOMETRY_SHADER);
-        glShaderSource(geo_shader, 1, &geo_shader_source, NULL);
-        glCompileShader(geo_shader);
-        //CheckShaderCompilation(geo_shader);
+    geo_shader = m_shaders.GetShaderID(ShaderType::G);
+    if (geo_shader) {
         glAttachShader(program, geo_shader);
-    }*/
+    }
 
     fragment_shader = m_shaders.GetShaderID(ShaderType::FRAGMENT);
-    glAttachShader(program, fragment_shader);
-
+    if (fragment_shader) {
+        glAttachShader(program, fragment_shader);
+    }
     glLinkProgram(program);
 
-    glDeleteShader(vertex_shader);
-    glDeleteShader(fragment_shader);
-    /*if (activeShaders["Tess Control"]) {
+    if (vertex_shader) {
+        glDeleteShader(vertex_shader);
+    }
+
+    if (fragment_shader) {
+        glDeleteShader(fragment_shader);
+    }
+
+    if (tessc_shader) {
         glDeleteShader(tessc_shader);
     }
-    if (activeShaders["Tess"]) {
+    if (tesse_shader) {
         glDeleteShader(tesse_shader);
     }
-    if (activeShaders["Geo"]) {
+    if (geo_shader) {
         glDeleteShader(geo_shader);
-    }*/
+    }
 
     return program;
-}
-
-// Might rename the function to something like GetGLLog or something
-void GFXManager::CheckShaderCompilation(GLuint& shader) {
-    GLint success = 0;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-    if (success == GL_FALSE) {
-        GLint maxLength = 0;
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
-
-        std::vector<GLchar> errorLog(maxLength);
-        glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
-        for (int i = 0; i < maxLength; i++) {
-            std::cout << errorLog[i];
-        }
-    }
-    else {
-        std::cout << "Success!!!\n\n";
-    }
 }
 
 void GFXManager::Renderer(float dt) {

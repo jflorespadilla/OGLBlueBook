@@ -20,11 +20,9 @@ public:
 	void Start();
 	void Run();
 	void Renderer(float dt);
-	GLuint CompileShaders();
+	GLuint CreateDefaultProgram();
 
 private:
-	void CheckShaderCompilation(GLuint& shader);
-
 	GLuint m_rendering_program;
 	GLuint m_vertex_array_object;
 	Shader m_shaders;
