@@ -20,7 +20,7 @@ public:
 	void CompileShaders();
 	GLuint GetShaderID(ShaderType shaderType);
 	GLuint CheckShaderCompilation(GLuint& shader);
-
+	void ClearShaderList();
 
 private:
 	std::unordered_map<ShaderType, std::string> ShaderSourceList;

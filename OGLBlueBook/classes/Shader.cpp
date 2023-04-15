@@ -112,3 +112,8 @@ GLuint Shader::CheckShaderCompilation(GLuint& shader) {
 
     return success;
 }
+
+void Shader::ClearShaderList() {
+    ShaderSourceList.clear();
+    CompiledShaders.clear();
+}
