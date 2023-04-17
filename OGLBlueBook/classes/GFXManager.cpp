@@ -63,6 +63,7 @@ void GFXManager::Run() {
     }
 }
 
+// Not sure if this is how I want to structure things, but it'll do.
 GLuint GFXManager::CreateDefaultProgram() {
     GLuint vertex_shader;
     GLuint fragment_shader;
