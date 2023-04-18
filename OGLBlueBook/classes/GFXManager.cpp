@@ -123,6 +123,18 @@ GLuint GFXManager::CreateDefaultProgram() {
     return program;
 }
 
+/*
+    Other shader programs will be loaded later. Some ideas:
+
+    GLuint GFXManager::CreateCellShadeProgram() {
+
+    }
+
+    GLuint GFXManager::CreateTeaPot() {
+    
+    }
+*/
+
 void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = { (float)sin(dt) * 0.5f + 0.5f, (float)cos(dt) * 0.5f + 0.5f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
