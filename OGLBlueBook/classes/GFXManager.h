@@ -26,7 +26,6 @@ private:
 	GLuint m_rendering_program;
 	GLuint m_vertex_array_object;
 	Shader m_shaders;
-	std::unordered_map<std::string, bool> activeShaders;
 	GLFWwindow* m_window;
 
 	bool m_glfwFlag;
