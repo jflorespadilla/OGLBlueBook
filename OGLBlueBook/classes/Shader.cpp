@@ -3,7 +3,11 @@
 Shader::Shader() {
 
 }
-//write second constructor
+
+Shader::Shader(Shader &shader) {
+    ShaderSourceList = shader.ShaderSourceList;
+    CompiledShaders = shader.CompiledShaders;
+}
 
 Shader::~Shader() {
 
