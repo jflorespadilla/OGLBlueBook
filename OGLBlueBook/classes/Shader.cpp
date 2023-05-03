@@ -121,3 +121,5 @@ void Shader::ClearShaderList() {
     ShaderSourceList.clear();
     CompiledShaders.clear();
 }
+
+// operator overload funcitinon
