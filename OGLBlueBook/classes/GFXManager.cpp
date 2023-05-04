@@ -36,12 +36,6 @@ GFXManager::~GFXManager() {
 
 void GFXManager::Start() {
     if (!m_glfwFlag) {
-        m_shaders.GetShaderSource("shaders/vs.shader");
-        m_shaders.GetShaderSource("shaders/fs.shader");
-        m_shaders.GetShaderSource("shaders/tcs.shader-n");
-        m_shaders.GetShaderSource("shaders/tes.shader-n");
-        m_shaders.GetShaderSource("shaders/geo.shader-n");
-
         m_rendering_program = CreateDefaultProgram();
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
@@ -65,11 +59,11 @@ void GFXManager::Run() {
 
 // Not sure if this is how I want to structure things, but it'll do.
 GLuint GFXManager::CreateDefaultProgram() {
+    m_shaders.GetShaderSource("shaders/vs.shader");
+    m_shaders.GetShaderSource("shaders/fs.shader");
+
     GLuint vertex_shader;
     GLuint fragment_shader;
-    GLuint tessc_shader;
-    GLuint tesse_shader;
-    GLuint geo_shader;
     GLuint program;
 
     m_shaders.CompileShaders();
@@ -79,21 +73,6 @@ GLuint GFXManager::CreateDefaultProgram() {
     vertex_shader = m_shaders.GetShaderID(ShaderType::VERTEX);
     if (vertex_shader) {
         glAttachShader(program, vertex_shader);
-    }
-
-    tessc_shader = m_shaders.GetShaderID(ShaderType::TC);
-    if (tessc_shader) {
-        glAttachShader(program, tessc_shader);
-    }
-
-    tesse_shader = m_shaders.GetShaderID(ShaderType::T);
-    if (tesse_shader) {
-        glAttachShader(program, tesse_shader);
-    }
-
-    geo_shader = m_shaders.GetShaderID(ShaderType::G);
-    if (geo_shader) {
-        glAttachShader(program, geo_shader);
     }
 
     fragment_shader = m_shaders.GetShaderID(ShaderType::FRAGMENT);
@@ -108,16 +87,6 @@ GLuint GFXManager::CreateDefaultProgram() {
 
     if (fragment_shader) {
         glDeleteShader(fragment_shader);
-    }
-
-    if (tessc_shader) {
-        glDeleteShader(tessc_shader);
-    }
-    if (tesse_shader) {
-        glDeleteShader(tesse_shader);
-    }
-    if (geo_shader) {
-        glDeleteShader(geo_shader);
     }
 
     return program;
