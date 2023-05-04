@@ -4,7 +4,7 @@ Shader::Shader() {
 
 }
 
-Shader::Shader(Shader &shader) {
+Shader::Shader(const Shader &shader) {
     ShaderSourceList = shader.ShaderSourceList;
     CompiledShaders = shader.CompiledShaders;
 }
@@ -122,4 +122,7 @@ void Shader::ClearShaderList() {
     CompiledShaders.clear();
 }
 
-// operator overload funcitinon
+Shader Shader::operator=(const Shader& shader) {
+    Shader returnShader(shader);
+    return returnShader;
+}

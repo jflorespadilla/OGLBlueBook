@@ -15,13 +15,14 @@ class Shader
 {
 public:
 	Shader();
-	Shader(Shader &shader);
+	Shader(const Shader &shader);
 	~Shader();
 	bool GetShaderSource(std::string FilePath);
 	void CompileShaders();
 	GLuint GetShaderID(ShaderType shaderType);
 	GLuint CheckShaderCompilation(GLuint& shader);
 	void ClearShaderList();
+	Shader operator=(const Shader& shader);
 
 private:
 	std::unordered_map<ShaderType, std::string> ShaderSourceList;
