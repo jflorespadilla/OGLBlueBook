@@ -104,7 +104,7 @@ GLuint GFXManager::CreateDefaultProgram() {
 */
 
 void GFXManager::Renderer(float dt) {
-    const GLfloat BGcolor[] = { (float)sin(dt) * 0.5f + 0.5f, (float)cos(dt) * 0.5f + 0.5f, 0.0f, 1.0f};
+    const GLfloat BGcolor[] = {0.5f, 0.5f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
 
