@@ -108,6 +108,8 @@ void GFXManager::Renderer(float dt) {
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
 
+    // Need to figure our bear minimum stuff for renderer
+
     GLfloat attrib[] = { 0.5f , 0.6f, 0.0f, 0.0f };
     glVertexAttrib4fv(0, attrib);
     glDrawArrays(GL_TRIANGLES, 0, 3);
