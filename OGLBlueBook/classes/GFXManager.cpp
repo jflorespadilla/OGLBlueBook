@@ -3,6 +3,7 @@
 GFXManager::GFXManager():
 m_rendering_program(0),
 m_vertex_array_object(0),
+m_buffer(0),
 m_window(NULL),
 m_glfwFlag(false)
 {
@@ -37,9 +38,25 @@ GFXManager::~GFXManager() {
 void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
-        glCreateVertexArrays(1, &m_vertex_array_object);
-        glBindVertexArray(m_vertex_array_object);
 
+        glCreateBuffers(1, &m_buffer);
+        glNamedBufferStorage(m_buffer, 4 * 3 * sizeof(GLfloat), NULL, GL_DYNAMIC_STORAGE_BIT);
+        //glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
+
+        static const float data[] = {
+            0.25f, -0.25f, 0.5f, 1.0f,
+           -0.25f, -0.25f, 0.5f, 1.0f,
+            0.25f,  0.25f, 0.5f, 1.0f
+        };
+        glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
+        /*void* ptr = glMapNamedBuffer(m_buffer, GL_WRITE_ONLY);
+        memcpy(ptr, data, 4 * 3 * sizeof(float));
+        glUnmapNamedBuffer(GL_ARRAY_BUFFER);*/
+
+        //glCreateVertexArrays(1, &m_vertex_array_object);
+        //glBindVertexArray(m_vertex_array_object);
+        
+        // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
         m_camera = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f));
     }
@@ -104,13 +121,11 @@ GLuint GFXManager::CreateDefaultProgram() {
 */
 
 void GFXManager::Renderer(float dt) {
-    const GLfloat BGcolor[] = {0.5f, 0.5f, 0.0f, 1.0f};
+    const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
 
-    // Need to figure our bear minimum stuff for renderer
-
-    GLfloat attrib[] = { 0.5f , 0.6f, 0.0f, 0.0f };
+    GLfloat attrib[] = { 0.0f , 0.0f, 0.0f, 0.0f };
     glVertexAttrib4fv(0, attrib);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
