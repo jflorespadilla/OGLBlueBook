@@ -39,8 +39,11 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
 
-        glCreateBuffers(1, &m_buffer);
-        glNamedBufferStorage(m_buffer, 4 * 3 * sizeof(GLfloat), NULL, GL_DYNAMIC_STORAGE_BIT);
+        glGenBuffers(1, &m_buffer);
+        glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
+
+        //glCreateBuffers(1, &m_buffer);
+        //glNamedBufferStorage(m_buffer, 4 * 3 * sizeof(GLfloat), NULL, GL_DYNAMIC_STORAGE_BIT);
         //glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
 
         static const float data[] = {
@@ -48,7 +51,10 @@ void GFXManager::Start() {
            -0.25f, -0.25f, 0.5f, 1.0f,
             0.25f,  0.25f, 0.5f, 1.0f
         };
-        glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
+
+        glBufferData(m_buffer, 3 * 4 * sizeof(float), data, GL_DYNAMIC_DRAW);
+
+        //glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
         /*void* ptr = glMapNamedBuffer(m_buffer, GL_WRITE_ONLY);
         memcpy(ptr, data, 4 * 3 * sizeof(float));
         glUnmapNamedBuffer(GL_ARRAY_BUFFER);*/
