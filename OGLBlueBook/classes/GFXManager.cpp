@@ -39,7 +39,10 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
 
+        glGenVertexArrays(1, &m_vertex_array_object);
         glGenBuffers(1, &m_buffer);
+        
+        glBindVertexArray(m_vertex_array_object);  
         glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
 
         //glCreateBuffers(1, &m_buffer);
@@ -52,7 +55,9 @@ void GFXManager::Start() {
             0.25f,  0.25f, 0.5f, 1.0f
         };
 
-        glBufferData(m_buffer, 3 * 4 * sizeof(float), data, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, 3 * 4 * sizeof(float), data, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), (void*)0);
 
         //glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
         /*void* ptr = glMapNamedBuffer(m_buffer, GL_WRITE_ONLY);
@@ -62,6 +67,11 @@ void GFXManager::Start() {
         //glCreateVertexArrays(1, &m_vertex_array_object);
         //glBindVertexArray(m_vertex_array_object);
         
+        glEnableVertexAttribArray(0);
+
+        glBindBuffer(m_buffer, 0);
+        glBindVertexArray(m_vertex_array_object);
+
         // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
         m_camera = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f));
@@ -131,7 +141,9 @@ void GFXManager::Renderer(float dt) {
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
 
-    GLfloat attrib[] = { 0.0f , 0.0f, 0.0f, 0.0f };
-    glVertexAttrib4fv(0, attrib);
+    glBindVertexArray(m_vertex_array_object);
+
+    //GLfloat attrib[] = { 0.0f , 0.0f, 0.0f, 0.0f };
+    //glVertexAttrib4fv(0, attrib);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
