@@ -45,6 +45,7 @@ void GFXManager::Start() {
         glBindVertexArray(m_vertex_array_object);  
         glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
 
+        // Using GL Docs to *correctly* use the glCreate* functions.
         //glCreateBuffers(1, &m_buffer);
         //glNamedBufferStorage(m_buffer, 4 * 3 * sizeof(GLfloat), NULL, GL_DYNAMIC_STORAGE_BIT);
         //glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
