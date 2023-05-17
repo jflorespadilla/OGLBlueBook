@@ -38,12 +38,13 @@ GFXManager::~GFXManager() {
 void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
-
+        /*
         glGenVertexArrays(1, &m_vertex_array_object);
         glGenBuffers(1, &m_buffer);
         
         glBindVertexArray(m_vertex_array_object);  
         glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
+        */
 
         // Using GL Docs to *correctly* use the glCreate* functions.
         //glCreateBuffers(1, &m_buffer);
