@@ -38,7 +38,8 @@ GFXManager::~GFXManager() {
 void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
-        /*
+
+        /* using glGen*
         glGenVertexArrays(1, &m_vertex_array_object);
         glGenBuffers(1, &m_buffer);
         
@@ -57,14 +58,16 @@ void GFXManager::Start() {
             0.25f,  0.25f, 0.5f, 1.0f
         };
 
-        /*
+        /* Using glGen*
         glBufferData(GL_ARRAY_BUFFER, 3 * 4 * sizeof(float), data, GL_STATIC_DRAW);
 
         glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), (void*)0);
         */
 
         //glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
-        /*void* ptr = glMapNamedBuffer(m_buffer, GL_WRITE_ONLY);
+
+        /* Using glGen*
+        void* ptr = glMapNamedBuffer(m_buffer, GL_WRITE_ONLY);
         memcpy(ptr, data, 4 * 3 * sizeof(float));
         glUnmapNamedBuffer(GL_ARRAY_BUFFER);*/
 
