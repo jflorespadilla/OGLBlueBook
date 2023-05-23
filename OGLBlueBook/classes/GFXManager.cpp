@@ -66,13 +66,14 @@ void GFXManager::Start() {
 
         glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
 
-        /* Using glGen*
+        /* Using glGen* but maps instead
         void* ptr = glMapNamedBuffer(m_buffer, GL_WRITE_ONLY);
         memcpy(ptr, data, 4 * 3 * sizeof(float));
         glUnmapNamedBuffer(GL_ARRAY_BUFFER);*/
 
-        //glCreateVertexArrays(1, &m_vertex_array_object);
-        //glBindVertexArray(m_vertex_array_object);
+        // TODO: Follow vertex array section in book
+        glCreateVertexArrays(1, &m_vertex_array_object);
+        glBindVertexArray(m_vertex_array_object);
         
         /*
         glEnableVertexAttribArray(0);
@@ -146,6 +147,7 @@ GLuint GFXManager::CreateDefaultProgram() {
 */
 
 void GFXManager::Renderer(float dt) {
+    // glClearNamedBufferSubData() ?
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
