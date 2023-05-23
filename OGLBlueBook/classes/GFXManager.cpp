@@ -48,9 +48,9 @@ void GFXManager::Start() {
         */
 
         // Using GL Docs to *correctly* use the glCreate* functions.
-        //glCreateBuffers(1, &m_buffer);
-        //glNamedBufferStorage(m_buffer, 4 * 3 * sizeof(GLfloat), NULL, GL_DYNAMIC_STORAGE_BIT);
-        //glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
+        glCreateBuffers(1, &m_buffer);
+        glNamedBufferStorage(m_buffer, 4 * 3 * sizeof(GLfloat), NULL, GL_DYNAMIC_STORAGE_BIT);
+        glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
 
         static const float data[] = {
             0.25f, -0.25f, 0.5f, 1.0f,
@@ -64,7 +64,7 @@ void GFXManager::Start() {
         glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), (void*)0);
         */
 
-        //glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
+        glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
 
         /* Using glGen*
         void* ptr = glMapNamedBuffer(m_buffer, GL_WRITE_ONLY);
