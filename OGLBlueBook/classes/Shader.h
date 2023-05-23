@@ -20,12 +20,12 @@ public:
 	bool GetShaderSource(std::string FilePath);
 	void CompileShaders();
 	GLuint GetShaderID(ShaderType shaderType);
-	GLuint CheckShaderCompilation(GLuint& shader);
 	void ClearShaderList();
 	Shader operator=(const Shader& shader);
 
 private:
 	std::unordered_map<ShaderType, std::string> ShaderSourceList;
 	std::unordered_map<ShaderType, GLuint> CompiledShaders;
+	GLuint CheckShaderCompilation(GLuint& shader);
 };
 
