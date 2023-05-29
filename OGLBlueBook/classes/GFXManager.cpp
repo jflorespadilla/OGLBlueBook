@@ -147,13 +147,13 @@ GLuint GFXManager::CreateDefaultProgram() {
 */
 
 void GFXManager::Renderer(float dt) {
-    // glClearNamedBufferSubData() ?
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
 
-    glBindVertexArray(m_vertex_array_object);
+    glBindVertexArray(m_vertex_array_object); // I need to re-read the docs here. It might be a reduntant thing to bind here. Certainly not good in the long run.
 
+    // Keeping here for now, but any data modification should happen during program creation.
     //GLfloat attrib[] = { 0.0f , 0.0f, 0.0f, 0.0f };
     //glVertexAttrib4fv(0, attrib);
     glDrawArrays(GL_TRIANGLES, 0, 3);
