@@ -52,6 +52,7 @@ void GFXManager::Start() {
         glNamedBufferStorage(m_buffer, 4 * 3 * sizeof(GLfloat), NULL, GL_DYNAMIC_STORAGE_BIT);
         glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
 
+        // Should data creation and other things be done elsewhere? Probably.
         static const float data[] = {
             0.25f, -0.25f, 0.5f, 1.0f,
            -0.25f, -0.25f, 0.5f, 1.0f,
