@@ -39,14 +39,6 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
 
-        /* using glGen*
-        glGenVertexArrays(1, &m_vertex_array_object);
-        glGenBuffers(1, &m_buffer);
-        
-        glBindVertexArray(m_vertex_array_object);  
-        glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
-        */
-
         // Using GL Docs to *correctly* use the glCreate* functions.
         glCreateBuffers(1, &m_buffer);
         glNamedBufferStorage(m_buffer, 4 * 3 * sizeof(GLfloat), NULL, GL_DYNAMIC_STORAGE_BIT);
@@ -59,30 +51,12 @@ void GFXManager::Start() {
             0.25f,  0.25f, 0.5f, 1.0f
         };
 
-        /* Using glGen*
-        glBufferData(GL_ARRAY_BUFFER, 3 * 4 * sizeof(float), data, GL_STATIC_DRAW);
-
-        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), (void*)0);
-        */
-
         glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
-
-        /* Using glGen* but maps instead
-        void* ptr = glMapNamedBuffer(m_buffer, GL_WRITE_ONLY);
-        memcpy(ptr, data, 4 * 3 * sizeof(float));
-        glUnmapNamedBuffer(GL_ARRAY_BUFFER);*/
 
         // TODO: Follow vertex array section in book
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
         
-        /*
-        glEnableVertexAttribArray(0);
-
-        glBindBuffer(m_buffer, 0);
-        glBindVertexArray(m_vertex_array_object);
-        */
-
         // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
         m_camera = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f));
@@ -151,8 +125,6 @@ void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
-
-    glBindVertexArray(m_vertex_array_object); // I need to re-read the docs here. It might be a reduntant thing to bind here. Certainly not good in the long run.
 
     // Keeping here for now, but any data modification should happen during program creation.
     //GLfloat attrib[] = { 0.0f , 0.0f, 0.0f, 0.0f };
