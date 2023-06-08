@@ -53,9 +53,9 @@ void GFXManager::Start() {
 
         glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
 
-        // TODO: Follow vertex array section in book
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
+        glVertexArrayAttribBinding(m_vertex_array_object, 0, 0); // I have no clue how this is supposed to be filled
         
         // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
