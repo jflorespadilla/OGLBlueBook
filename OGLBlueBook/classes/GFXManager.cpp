@@ -55,8 +55,11 @@ void GFXManager::Start() {
 
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
+
+        glVertexArrayVertexBuffer(m_vertex_array_object, 0, m_buffer, 0, sizeof(GLfloat) * 4);
         glVertexArrayAttribBinding(m_vertex_array_object, 0, 0); // I have no clue how this is supposed to be filled
-        
+        glVertexArrayAttribFormat(m_vertex_array_object, 0, 4 * 3 * sizeof(GLfloat), GL_FLOAT, GL_FALSE, 0); // This SHOULD be right. IDK
+
         // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
         m_camera = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f));
