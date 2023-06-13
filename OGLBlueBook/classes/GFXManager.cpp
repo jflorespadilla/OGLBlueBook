@@ -57,8 +57,8 @@ void GFXManager::Start() {
         glBindVertexArray(m_vertex_array_object);
 
         glVertexArrayVertexBuffer(m_vertex_array_object, 0, m_buffer, 0, sizeof(GLfloat) * 4);
-        glVertexArrayAttribBinding(m_vertex_array_object, 0, 0); // I have no clue how this is supposed to be filled
-        glVertexArrayAttribFormat(m_vertex_array_object, 0, 4 * 3 * sizeof(GLfloat), GL_FLOAT, GL_FALSE, 0); // This SHOULD be right. IDK
+        glVertexArrayAttribBinding(m_vertex_array_object, 0, 0);
+        glVertexArrayAttribFormat(m_vertex_array_object, 0, 4, GL_FLOAT, GL_FALSE, 0);
 
         // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
@@ -73,6 +73,7 @@ void GFXManager::Start() {
 void GFXManager::Run() {
     while (!glfwWindowShouldClose(m_window)) {
         Renderer(glfwGetTime());
+        glDisableVertexArrayAttrib(m_vertex_array_object, 0);
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
@@ -128,6 +129,7 @@ void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
+    glEnableVertexArrayAttrib(m_vertex_array_object, 0);
 
     // Keeping here for now, but any data modification should happen during program creation.
     //GLfloat attrib[] = { 0.0f , 0.0f, 0.0f, 0.0f };
