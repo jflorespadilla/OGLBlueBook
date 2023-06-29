@@ -56,9 +56,19 @@ void GFXManager::Start() {
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
 
-        glVertexArrayVertexBuffer(m_vertex_array_object, 0, m_buffer, 0, sizeof(GLfloat) * 4);
+        glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
+                                                    0,                                      // First vertex buffer binding
+                                                    m_buffer,                         // Buffer object
+                                                    0,                                      // Buffer offset
+                                                    sizeof(GLfloat) * 4);        // Size of data, in this case a vertex of floats
+
         glVertexArrayAttribBinding(m_vertex_array_object, 0, 0);
-        glVertexArrayAttribFormat(m_vertex_array_object, 0, 4, GL_FLOAT, GL_FALSE, 0);
+        glVertexArrayAttribFormat(m_vertex_array_object, // Vertex array object
+                                                    0,                                      // First attribute
+                                                    4,                                      // Component count, in this case 4
+                                                    GL_FLOAT,                    // Component data type, in this case float
+                                                    GL_FALSE,                    // Is normalized
+                                                    0);                                    // Location of first element of the vertex
 
         // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
@@ -127,7 +137,6 @@ GLuint GFXManager::CreateDefaultProgram() {
 
 void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
-    glGetAttribLocation(m_rendering_program, "position");
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
     glEnableVertexArrayAttrib(m_vertex_array_object, 0);
