@@ -25,7 +25,7 @@ public:
 private:
 	GLuint m_rendering_program;
 	GLuint m_vertex_array_object;
-	GLuint m_buffer; // Essentially the same as vertex array object. But I need to learn more about glCreate*()
+	GLuint* m_buffers;
 	Shader m_shaders;
 	GLFWwindow* m_window;
 

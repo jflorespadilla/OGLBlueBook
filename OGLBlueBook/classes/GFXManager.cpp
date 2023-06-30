@@ -39,26 +39,31 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
 
-        // Using GL Docs to *correctly* use the glCreate* functions.
-        glCreateBuffers(1, &m_buffer);
-        glNamedBufferStorage(m_buffer, 4 * 3 * sizeof(GLfloat), NULL, GL_DYNAMIC_STORAGE_BIT);
-        glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
-
         // Should data creation and other things be done elsewhere? Probably.
-        static const float data[] = {
+        static const float position[] = {
             0.25f, -0.25f, 0.5f, 1.0f,
            -0.25f, -0.25f, 0.5f, 1.0f,
             0.25f,  0.25f, 0.5f, 1.0f
         };
+        static const float color[] = {
+            1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f
+        };
 
-        glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
+        // Using GL Docs to *correctly* use the glCreate* functions.
+        glCreateBuffers(2, m_buffers);
+        glNamedBufferStorage(m_buffers[0], 4 * 3 * sizeof(GLfloat), &m_buffers[0], GL_DYNAMIC_STORAGE_BIT);
+        glBindBuffer(GL_ARRAY_BUFFER, m_buffers[0]);
+
+        //glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data); - already loaded up data in initial call of glNambedBufferStoarage
 
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
 
         glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
                                                     0,                                      // First vertex buffer binding
-                                                    m_buffer,                         // Buffer object
+                                                    m_buffers[0],                         // Buffer object
                                                     0,                                      // Buffer offset
                                                     sizeof(GLfloat) * 4);        // Size of data, in this case a vertex of floats
 
@@ -139,6 +144,7 @@ void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
+
     glEnableVertexArrayAttrib(m_vertex_array_object, 0);
 
     // Keeping here for now, but any data modification should happen during program creation.
