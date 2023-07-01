@@ -25,7 +25,7 @@ public:
 private:
 	GLuint m_rendering_program;
 	GLuint m_vertex_array_object;
-	GLuint* m_buffers;
+	GLuint m_buffer[2]; // Going to set this as an array because keeping it as a pointer was catastropically bad
 	Shader m_shaders;
 	GLFWwindow* m_window;
 

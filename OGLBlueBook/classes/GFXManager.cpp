@@ -3,7 +3,7 @@
 GFXManager::GFXManager():
 m_rendering_program(0),
 m_vertex_array_object(0),
-m_buffer(0),
+m_buffer{ 0,0 },
 m_window(NULL),
 m_glfwFlag(false)
 {
@@ -39,12 +39,12 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
 
-        // Should data creation and other things be done elsewhere? Probably.
-        static const float position[] = {
-            0.25f, -0.25f, 0.5f, 1.0f,
-           -0.25f, -0.25f, 0.5f, 1.0f,
-            0.25f,  0.25f, 0.5f, 1.0f
+        static const float positions[] = {
+        0.25f, -0.25f, 0.5f, 1.0f,
+       -0.25f, -0.25f, 0.5f, 1.0f,
+        0.25f,  0.25f, 0.5f, 1.0f
         };
+
         static const float color[] = {
             1.0f, 0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f, 0.0f,
@@ -52,28 +52,34 @@ void GFXManager::Start() {
         };
 
         // Using GL Docs to *correctly* use the glCreate* functions.
-        glCreateBuffers(2, m_buffers);
-        glNamedBufferStorage(m_buffers[0], 4 * 3 * sizeof(GLfloat), &m_buffers[0], GL_DYNAMIC_STORAGE_BIT);
-        glBindBuffer(GL_ARRAY_BUFFER, m_buffers[0]);
-
-        //glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data); - already loaded up data in initial call of glNambedBufferStoarage
+        glCreateBuffers(2, &m_buffer[0]);
+        glNamedBufferStorage(m_buffer[0], sizeof(GLfloat)*4*3, positions, 0);
+        //glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
+        //glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
 
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
 
+
+        // Formats the first element of the buffer to contain position info
         glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
                                                     0,                                      // First vertex buffer binding
-                                                    m_buffers[0],                         // Buffer object
-                                                    0,                                      // Buffer offset
-                                                    sizeof(GLfloat) * 4);        // Size of data, in this case a vertex of floats
-
-        glVertexArrayAttribBinding(m_vertex_array_object, 0, 0);
+                                                    m_buffer[0],                    // Buffer object
+                                                    0,                                     // Buffer offset
+                                                    sizeof(GLfloat) * 4);       // Size of data, in this case a vertex of floats
         glVertexArrayAttribFormat(m_vertex_array_object, // Vertex array object
                                                     0,                                      // First attribute
                                                     4,                                      // Component count, in this case 4
                                                     GL_FLOAT,                    // Component data type, in this case float
                                                     GL_FALSE,                    // Is normalized
                                                     0);                                    // Location of first element of the vertex
+        glVertexArrayAttribBinding(m_vertex_array_object, 0, 0);
+
+        // Formats the second element of the buffer to contain color info
+        glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, color, 0);
+        glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4 * 3);
+        glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
+        glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
 
         // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
@@ -146,6 +152,7 @@ void GFXManager::Renderer(float dt) {
     glUseProgram(m_rendering_program);
 
     glEnableVertexArrayAttrib(m_vertex_array_object, 0);
+    glEnableVertexAttribArray(1);
 
     // Keeping here for now, but any data modification should happen during program creation.
     //GLfloat attrib[] = { 0.0f , 0.0f, 0.0f, 0.0f };
