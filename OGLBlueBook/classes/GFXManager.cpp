@@ -46,9 +46,9 @@ void GFXManager::Start() {
         };
 
         static const float color[] = {
-            1.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 1.0f, 0.0f
+            0.6f, 0.5f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f
         };
 
         // Using GL Docs to *correctly* use the glCreate* functions.
@@ -95,6 +95,7 @@ void GFXManager::Run() {
     while (!glfwWindowShouldClose(m_window)) {
         Renderer(glfwGetTime());
         glDisableVertexArrayAttrib(m_vertex_array_object, 0);
+        glDisableVertexAttribArray(1);
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
