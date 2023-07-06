@@ -46,7 +46,7 @@ void GFXManager::Start() {
         };
 
         static const float color[] = {
-            0.6f, 0.5f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
             0.0f, 0.0f, 1.0f, 1.0f,
             0.0f, 0.0f, 1.0f, 1.0f
         };
@@ -79,7 +79,7 @@ void GFXManager::Start() {
         glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, color, 0);
         glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4 * 3);
         glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
-        glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
+        glVertexArrayAttribBinding(m_vertex_array_object, 1, 1); // Is this loading up all of the color info? wtf
 
         // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
