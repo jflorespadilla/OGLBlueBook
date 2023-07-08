@@ -47,13 +47,13 @@ void GFXManager::Start() {
 
         static const float color[] = {
             0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f
+            0.0f, 1.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f
         };
 
         // Using GL Docs to *correctly* use the glCreate* functions.
         glCreateBuffers(2, &m_buffer[0]);
-        glNamedBufferStorage(m_buffer[0], sizeof(GLfloat)*4*3, positions, 0);
+        glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4* 3, positions, 0);
         //glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
         //glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
 
@@ -66,7 +66,7 @@ void GFXManager::Start() {
                                                     0,                                      // First vertex buffer binding
                                                     m_buffer[0],                    // Buffer object
                                                     0,                                     // Buffer offset
-                                                    sizeof(GLfloat) * 4);       // Size of data, in this case a vertex of floats
+                                                    sizeof(GLfloat) * 4);       // Stride
         glVertexArrayAttribFormat(m_vertex_array_object, // Vertex array object
                                                     0,                                      // First attribute
                                                     4,                                      // Component count, in this case 4
@@ -77,9 +77,9 @@ void GFXManager::Start() {
 
         // Formats the second element of the buffer to contain color info
         glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, color, 0);
-        glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4 * 3);
+        glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4); // I'm an idiot. Color was off because I put in the wrong stride.
         glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
-        glVertexArrayAttribBinding(m_vertex_array_object, 1, 1); // Is this loading up all of the color info? wtf
+        glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
 
         // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
