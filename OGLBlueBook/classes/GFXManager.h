@@ -25,7 +25,7 @@ public:
 private:
 	GLuint m_rendering_program;
 	GLuint m_vertex_array_object;
-	GLuint m_buffer[2]; // Going to set this as an array because keeping it as a pointer was catastropically bad
+	GLuint m_buffer; // Went from array to single variable in switch from Structures-of-arrays to Array-of-structures
 	Shader m_shaders;
 	GLFWwindow* m_window;
 
@@ -37,3 +37,8 @@ private:
 
 };
 
+// Going to build this here because I don't want to make another class for little to no functionality.
+struct vertex {
+	float x, y, z, w;
+	float r, g, b, a;
+};

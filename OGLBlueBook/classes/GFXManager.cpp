@@ -3,7 +3,7 @@
 GFXManager::GFXManager():
 m_rendering_program(0),
 m_vertex_array_object(0),
-m_buffer{ 0,0 },
+m_buffer (0),
 m_window(NULL),
 m_glfwFlag(false)
 {
@@ -39,7 +39,7 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
 
-        static const float positions[] = {
+        /*static const float positions[] = {
         0.25f, -0.25f, 0.5f, 1.0f,
        -0.25f, -0.25f, 0.5f, 1.0f,
         0.25f,  0.25f, 0.5f, 1.0f
@@ -49,37 +49,64 @@ void GFXManager::Start() {
             0.0f, 0.0f, 1.0f, 1.0f,
             0.0f, 1.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f
+        }; -Used this data set to implement a structure-of-arrays approach*/
+
+        vertex vertecies[] = {
+            {
+                0.25f, -0.25f, 0.5f, 1.0f, // Position
+                0.0f, 0.0f, 1.0f, 1.0f // Color
+            },
+            {
+                 -0.25f, -0.25f, 0.5f, 1.0f,
+                 0.0f, 1.0f, 0.0f, 1.0f
+            },
+            {
+                0.25f,  0.25f, 0.5f, 1.0f,
+                1.0f, 0.0f, 0.0f, 1.0f
+            } // I can't believe I can get away with this bullsit in C++. wtf
         };
 
         // Using GL Docs to *correctly* use the glCreate* functions.
-        glCreateBuffers(2, &m_buffer[0]);
-        glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4* 3, positions, 0);
-        //glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
-        //glNamedBufferSubData(m_buffer, 0, 4 * 3 * sizeof(GLfloat), data);
+        glCreateBuffers(2, &m_buffer);
+        glNamedBufferStorage(m_buffer, sizeof(GLfloat) * 4 * 2, vertecies, 0);
 
         glCreateVertexArrays(1, &m_vertex_array_object);
-        glBindVertexArray(m_vertex_array_object);
+        //glBindVertexArray(m_vertex_array_object); -- Immediately bounded VBO. I'm binding whole arrays this way.
+                                                                                   //  No need to inform VBO on seperate data segments, they all go to the same thing.
 
+        //////  I'm going to be informing VBO of different data segments inside of the buffer                             //////////
+        //////  It's necessary because now that the info is clumped together in our vertex struct                         //////////
+        //////  we need to tell our graphix card what the data means based on where it is in the buffer               //////////
+        //////  in this case <ppppccccppppcccc> for position and color. All floats, but where they are matters //////////
 
-        // Formats the first element of the buffer to contain position info
-        glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
+        glVertexArrayAttribBinding(m_vertex_array_object, 0, 0); // Setting up position data
+
+        // Formats the first element of the buffer to contain position info - used in SoA approach
+        /*glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
                                                     0,                                      // First vertex buffer binding
-                                                    m_buffer[0],                    // Buffer object
+                                                    m_buffer,                    // Buffer object
                                                     0,                                     // Buffer offset
-                                                    sizeof(GLfloat) * 4);       // Stride
+                                                    sizeof(GLfloat) * 4);       // Stride */
+
         glVertexArrayAttribFormat(m_vertex_array_object, // Vertex array object
                                                     0,                                      // First attribute
                                                     4,                                      // Component count, in this case 4
                                                     GL_FLOAT,                    // Component data type, in this case float
                                                     GL_FALSE,                    // Is normalized
-                                                    0);                                    // Location of first element of the vertex
-        glVertexArrayAttribBinding(m_vertex_array_object, 0, 0);
+                                                    offsetof(vertex, x));                                    // Location of first element of the vertex
+        glEnableVertexArrayAttrib(m_vertex_array_object, 0);
 
-        // Formats the second element of the buffer to contain color info
+        /* Formats the second element of the buffer to contain color info
         glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, color, 0);
-        glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4); // I'm an idiot. Color was off because I put in the wrong stride.
+        glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, s
         glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
         glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
+        */
+
+        glVertexArrayAttribBinding(m_vertex_array_object, 1, 0);
+        glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, offsetof(vertex, r));
+
+        glVertexArrayVertexBuffer(m_vertex_array_object, 0, m_buffer, 0, sizeof(GLfloat) * 4);
 
         // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
@@ -95,7 +122,9 @@ void GFXManager::Run() {
     while (!glfwWindowShouldClose(m_window)) {
         Renderer(glfwGetTime());
         glDisableVertexArrayAttrib(m_vertex_array_object, 0);
-        glDisableVertexAttribArray(1);
+        glDisableVertexArrayAttrib(m_vertex_array_object, 1);
+        /*glDisableVertexArrayAttrib(m_vertex_array_object, 0);
+        glDisableVertexAttribArray(1);*/
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
@@ -151,12 +180,10 @@ void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
-
     glEnableVertexArrayAttrib(m_vertex_array_object, 0);
-    glEnableVertexAttribArray(1);
+    glEnableVertexArrayAttrib(m_vertex_array_object, 1);
+    /*glEnableVertexArrayAttrib(m_vertex_array_object, 0);
+    glEnableVertexAttribArray(1); - SoA setup*/ 
 
-    // Keeping here for now, but any data modification should happen during program creation.
-    //GLfloat attrib[] = { 0.0f , 0.0f, 0.0f, 0.0f };
-    //glVertexAttrib4fv(0, attrib);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
