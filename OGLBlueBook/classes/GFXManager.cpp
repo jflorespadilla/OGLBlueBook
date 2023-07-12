@@ -98,15 +98,16 @@ void GFXManager::Start() {
 
         /* Formats the second element of the buffer to contain color info
         glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, color, 0);
-        glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, s
+        glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
         glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
         glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
         */
 
         glVertexArrayAttribBinding(m_vertex_array_object, 1, 0);
         glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, offsetof(vertex, r));
+        glEnableVertexArrayAttrib(m_vertex_array_object, 1);
 
-        glVertexArrayVertexBuffer(m_vertex_array_object, 0, m_buffer, 0, sizeof(GLfloat) * 4);
+        glVertexArrayVertexBuffer(m_vertex_array_object, 0, m_buffer, 0, sizeof(GLfloat) * 4 * 2);
 
         // to be used a little later
         m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
@@ -121,8 +122,7 @@ void GFXManager::Start() {
 void GFXManager::Run() {
     while (!glfwWindowShouldClose(m_window)) {
         Renderer(glfwGetTime());
-        glDisableVertexArrayAttrib(m_vertex_array_object, 0);
-        glDisableVertexArrayAttrib(m_vertex_array_object, 1);
+
         /*glDisableVertexArrayAttrib(m_vertex_array_object, 0);
         glDisableVertexAttribArray(1);*/
         glfwSwapBuffers(m_window);
@@ -180,8 +180,7 @@ void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
-    glEnableVertexArrayAttrib(m_vertex_array_object, 0);
-    glEnableVertexArrayAttrib(m_vertex_array_object, 1);
+
     /*glEnableVertexArrayAttrib(m_vertex_array_object, 0);
     glEnableVertexAttribArray(1); - SoA setup*/ 
 
