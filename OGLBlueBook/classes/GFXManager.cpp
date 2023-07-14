@@ -67,7 +67,7 @@ void GFXManager::Start() {
         };
 
         // Using GL Docs to *correctly* use the glCreate* functions.
-        glCreateBuffers(2, &m_buffer);
+        glCreateBuffers(1, &m_buffer);
         glNamedBufferStorage(m_buffer, sizeof(GLfloat) * 4 * 2, vertecies, 0);
 
         glCreateVertexArrays(1, &m_vertex_array_object);
@@ -180,6 +180,8 @@ void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
     glUseProgram(m_rendering_program);
+    
+    // I need to run some sort of check here. Info is going missing somewhere, but I'm not sure where.
 
     /*glEnableVertexArrayAttrib(m_vertex_array_object, 0);
     glEnableVertexAttribArray(1); - SoA setup*/ 
