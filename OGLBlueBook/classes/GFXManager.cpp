@@ -50,10 +50,8 @@ void GFXManager::Start() {
             0.0f, 1.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f
         };
-
-        // Using GL Docs to *correctly* use the glCreate* functions.
         glCreateBuffers(2, &m_buffer[0]);
-        glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, 0);
+        glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, 0); // I don't think order matters here... but we'll see!
 
         glCreateVertexArrays(1, &m_vertex_array_object);
         glBindVertexArray(m_vertex_array_object);
