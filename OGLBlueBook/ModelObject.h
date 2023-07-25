@@ -9,9 +9,9 @@
 class ModelObject
 {
 	// Load object via file
+	
 	// Destrcutor
 
-	// Will need to comeback in implement this afte reading appendix section.
-
+	// Define an enum for a different series of file types.
 };
 
