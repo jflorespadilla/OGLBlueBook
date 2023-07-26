@@ -6,12 +6,16 @@
 #include <fstream>
 #include <vector>
 
+// Add model type formats as necessary
+enum ModelType {STL, OBJ, VRML};
+
 class ModelObject
 {
+	ModelObject();
+	ModelObject(char* file, ModelType modelType);
+	ModelObject(const ModelObject &modelObject);
+	~ModelObject();
 	// Load object via file
-	
-	// Destrcutor
-
 	// Define an enum for a different series of file types.
 };
 
