@@ -12,10 +12,12 @@ enum ModelType {STL, OBJ, VRML};
 class ModelObject
 {
 	ModelObject();
-	ModelObject(char* file, ModelType modelType);
+	ModelObject(const char* file, ModelType modelType);
 	ModelObject(const ModelObject &modelObject);
 	~ModelObject();
-	// Load object via file
-	// Define an enum for a different series of file types.
+	void loadModel(const char* file, ModelType modelType);
+	void loadSTLModel();
+	void loadOBJModel();
+	void loadVRML();
 };
 
