@@ -16,8 +16,8 @@ class ModelObject
 	ModelObject(const ModelObject &modelObject);
 	~ModelObject();
 	void loadModel(const char* file, ModelType modelType);
-	void loadSTLModel();
-	void loadOBJModel();
-	void loadVRML();
+	void loadSTLModel(const std::fstream& ModelFile);
+	void loadOBJModel(const std::fstream& ModelFile);
+	void loadVRML(const std::fstream& ModelFile);
 };
 

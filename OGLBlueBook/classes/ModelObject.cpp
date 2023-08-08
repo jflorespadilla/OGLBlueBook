@@ -21,13 +21,29 @@ void ModelObject::loadModel(const char* file, ModelType modelType) {
 
 	switch (modelType) {
 	case ModelType::OBJ:
-		// Call model specific load function
+		loadOBJModel(ModelFile);
 		break;
 	case ModelType::STL:
-		// Call model specific load function
+		loadSTLModel(ModelFile);
 		break;
 	case ModelType::VRML:
-		// Call model specific load function
+		loadVRML(ModelFile);
 		break;
 	}
+	ModelFile.close();
+}
+
+void ModelObject::loadSTLModel(const std::fstream& ModelFile) {
+	// Parce file
+	// Load data
+}
+
+void ModelObject::loadOBJModel(const std::fstream& ModelFile) {
+	// Parce file
+	// Load data
+}
+
+void ModelObject::loadVRML(const std::fstream& ModelFile) {
+	// Parce file
+	// Load data
 }
