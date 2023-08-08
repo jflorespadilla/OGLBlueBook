@@ -10,6 +10,22 @@ ModelObject::ModelObject(const char* file, ModelType modelType) {
 	// Load up the file using the appropriate loader
 }
 
+
+void ModelObject::loadOBJModel(const std::fstream& ModelFile) {
+	// Parce file
+	// Load data
+}
+
+void ModelObject::loadSTLModel(const std::fstream& ModelFile) {
+	// Parce file
+	// Load data
+}
+
+void ModelObject::loadVRML(const std::fstream& ModelFile) {
+	// Parce file
+	// Load data
+}
+
 void ModelObject::loadModel(const char* file, ModelType modelType) {
 	std::fstream ModelFile(file, std::fstream::in);
 	
@@ -31,19 +47,4 @@ void ModelObject::loadModel(const char* file, ModelType modelType) {
 		break;
 	}
 	ModelFile.close();
-}
-
-void ModelObject::loadSTLModel(const std::fstream& ModelFile) {
-	// Parce file
-	// Load data
-}
-
-void ModelObject::loadOBJModel(const std::fstream& ModelFile) {
-	// Parce file
-	// Load data
-}
-
-void ModelObject::loadVRML(const std::fstream& ModelFile) {
-	// Parce file
-	// Load data
 }

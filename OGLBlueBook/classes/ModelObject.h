@@ -11,13 +11,18 @@ enum ModelType {STL, OBJ, VRML};
 
 class ModelObject
 {
-	ModelObject();
-	ModelObject(const char* file, ModelType modelType);
-	ModelObject(const ModelObject &modelObject);
-	~ModelObject();
-	void loadModel(const char* file, ModelType modelType);
-	void loadSTLModel(const std::fstream& ModelFile);
-	void loadOBJModel(const std::fstream& ModelFile);
-	void loadVRML(const std::fstream& ModelFile);
+	public:
+		ModelObject();
+		ModelObject(const char* file, ModelType modelType);
+		ModelObject(const ModelObject &modelObject);
+		~ModelObject();
+		void loadSTLModel(const std::fstream& ModelFile);
+		void loadOBJModel(const std::fstream& ModelFile);
+		void loadVRML(const std::fstream& ModelFile);
+		void loadModel(const char* file, ModelType modelType);
+
+	private:
+		// u,v coords?
+		// positional vectors?
 };
 
