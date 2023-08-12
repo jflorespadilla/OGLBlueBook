@@ -6,9 +6,8 @@
 #include <fstream>
 #include <vector>
 
-// I'm looking into the use of ASSIMP to import 3D models
-// Could not get back to this project/
-// I got busy :(
+// Doing a bit of late night coding.
+// Was once again busy. Could not get to computer fast enough.
 
 // Add model type formats as necessary
 enum ModelType {STL, OBJ, VRML};
