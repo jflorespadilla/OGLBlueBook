@@ -6,8 +6,8 @@
 #include <fstream>
 #include <vector>
 
-// Doing a bit of late night coding.
-// Was once again busy. Could not get to computer fast enough.
+#include <assimp/Importer.hpp> // Still not sure on how to test Assimp
+													   //  Going to toy around a bit before submitting any productive code.
 
 // Add model type formats as necessary
 enum ModelType {STL, OBJ, VRML};
