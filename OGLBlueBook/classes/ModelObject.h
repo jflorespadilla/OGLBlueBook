@@ -6,8 +6,7 @@
 #include <fstream>
 #include <vector>
 
-#include <assimp/Importer.hpp> // Still not sure on how to test Assimp
-													   //  Going to toy around a bit before submitting any productive code.
+#include <assimp/Importer.hpp> 
 
 // Add model type formats as necessary
 enum ModelType {STL, OBJ, VRML};

@@ -27,15 +27,18 @@ void ModelObject::loadVRML(const std::fstream& ModelFile) {
 }
 
 void ModelObject::loadModel(const char* file, ModelType modelType) {
-	std::fstream ModelFile(file, std::fstream::in);
+
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(file, aiComponent_TEXCOORDS | aiComponent_COLORS);
+	/*std::fstream ModelFile(file, std::fstream::in);
 	
 	if (!ModelFile.is_open()) {
 		return;
-	}
+	}*/
 
 	// Hopefully this glorified switch statement saves me some work later...
 
-	switch (modelType) {
+	/*switch (modelType) {
 	case ModelType::OBJ:
 		loadOBJModel(ModelFile);
 		break;
@@ -46,5 +49,5 @@ void ModelObject::loadModel(const char* file, ModelType modelType) {
 		loadVRML(ModelFile);
 		break;
 	}
-	ModelFile.close();
+	ModelFile.close();*/
 }
