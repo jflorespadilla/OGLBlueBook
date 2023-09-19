@@ -30,6 +30,11 @@ void ModelObject::loadModel(const char* file, ModelType modelType) {
 
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(file, aiComponent_TEXCOORDS | aiComponent_COLORS);
+
+	if (nullptr == scene) {
+		std::cerr << importer.GetErrorString();
+		return;
+	}
 	/*std::fstream ModelFile(file, std::fstream::in);
 	
 	if (!ModelFile.is_open()) {
