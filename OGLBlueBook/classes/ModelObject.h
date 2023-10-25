@@ -7,16 +7,20 @@
 #include <vector>
 // Need to learn how to use this library properly
 #include <assimp/Importer.hpp> 
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
-// Add model type formats as necessary
-enum ModelType {STL, OBJ, VRML};
+// No clue if I'll still need this. Gonna keep in comment for now.
+// enum ModelType {STL, OBJ, VRML};
 
 class ModelObject
 {
 	public:
 		ModelObject();
 		~ModelObject();
+		void Import(std::string fileName);
 
 	private:
+		Assimp::Importer importer;
 };
 
