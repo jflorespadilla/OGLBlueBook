@@ -18,7 +18,7 @@ class ModelObject
 	public:
 		ModelObject();
 		~ModelObject();
-		void Import(std::string fileName);
+		bool Import(std::string& fileName);
 
 	private:
 		Assimp::Importer importer;
