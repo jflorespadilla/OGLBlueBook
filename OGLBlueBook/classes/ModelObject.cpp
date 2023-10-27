@@ -20,5 +20,7 @@ bool ModelObject::Import(std::string& fileName) {
 	}
 	// Add some logic here to actually save values and process the scene
 
+	// Need to further study what it takes to produce a mesh
+
 	return true;
 }
