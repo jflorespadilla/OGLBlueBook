@@ -21,6 +21,5 @@ class ModelObject
 		bool Import(std::string& fileName);
 
 	private:
-		Assimp::Importer importer;
 };
 
