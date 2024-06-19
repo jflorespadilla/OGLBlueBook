@@ -21,9 +21,8 @@ bool ModelObject::Import(std::string& fileName) {
 		std::cerr << importer.GetErrorString();
 		return false;
 	}
-	// I'll need to process the scene here, according to the docs.
-	// I that will be my next reading assignment.
-
+	// Processing the scene will come, but first I should implement loggin.
+	// It requires the use of insterfaces. So we'll be learning something new-ish
 
 	return true;
 }
