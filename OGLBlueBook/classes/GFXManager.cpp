@@ -15,7 +15,7 @@ m_glfwFlag(false)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    m_window = glfwCreateWindow(640, 480, "Hola", NULL, NULL);
+    m_window = glfwCreateWindow(850, 620, "Hola", NULL, NULL);
     if (!m_window) {
         glfwTerminate();
         m_glfwFlag = true;
@@ -39,17 +39,15 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
 
-        static const float positions[] = {
-        0.25f, -0.25f, 0.5f, 1.0f,
-       -0.25f, -0.25f, 0.5f, 1.0f,
-        0.25f,  0.25f, 0.5f, 1.0f
-        };
+        // Tested this out and it works! Going to use GLM instead of pure arrays now.
+        glm::vec4 positions[] = { glm::vec4(0.25f, -0.25f, 0.5f, 1.0f),
+                                                 glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
+                                                 glm::vec4(0.25f, 0.25f, 0.5f, 1.0f) };
 
-        static const float color[] = {
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f, 1.0f
-        };
+        glm::vec4 color[] = { glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+                                          glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+                                          glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
+
         glCreateBuffers(2, &m_buffer[0]);
         glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, 0); // I don't think order matters here... but we'll see!
 
