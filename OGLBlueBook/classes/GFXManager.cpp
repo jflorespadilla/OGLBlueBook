@@ -39,14 +39,12 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
 
-        // Tested this out and it works! Going to use GLM instead of pure arrays now.
-        glm::vec4 positions[] = { glm::vec4(0.25f, -0.25f, 0.5f, 1.0f),
-                                                 glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
-                                                 glm::vec4(0.25f, 0.25f, 0.5f, 1.0f) };
+        // This beginning part will need to be worked on. I'll need to dynamically type positions and colors.
 
-        glm::vec4 color[] = { glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-                                          glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
-                                          glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
+        glm::vec4 positions[3];
+        glm::vec4 colors[3];
+
+        DefaultRenderer(positions, colors);
 
         glCreateBuffers(2, &m_buffer[0]);
         glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, 0); // I don't think order matters here... but we'll see!
@@ -69,7 +67,7 @@ void GFXManager::Start() {
                                                     0);                                    // Location of first element of the vertex
         glEnableVertexArrayAttrib(m_vertex_array_object, 0);
 
-        glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, color, 0);
+        glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, colors, 0);
         glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
         glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
         glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
@@ -93,6 +91,17 @@ void GFXManager::Run() {
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
+}
+
+// Array size intended to be 3
+void GFXManager::DefaultRenderer(glm::vec4* position, glm::vec4* color) {
+    position[0] = glm::vec4(0.25f, -0.25f, 0.5f, 1.0f);
+    position[1] = glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f);
+    position[2] = glm::vec4(0.25f, 0.25f, 0.5f, 1.0f);
+    
+    color[0] = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+    color[1] = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    color[2] = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 }
 
 GLuint GFXManager::CreateDefaultProgram() {

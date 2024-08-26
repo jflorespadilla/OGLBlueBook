@@ -20,6 +20,7 @@ public:
 	void Start();
 	void Run();
 	void Renderer(float dt);
+	void DefaultRenderer(glm::vec4* position, glm::vec4* color);
 	GLuint CreateDefaultProgram();
 
 private:
@@ -34,5 +35,4 @@ private:
 	// Model should happen sparately elsewhere
 	glm::mat4 m_camera;
 	glm::mat4 m_projection;
-
 };
