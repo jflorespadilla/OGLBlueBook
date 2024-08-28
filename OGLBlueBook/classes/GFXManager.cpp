@@ -39,42 +39,9 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
 
-        // This beginning part will need to be worked on. I'll need to dynamically type positions and colors.
+        // Decided to move different rendering solutions to their own fuction.
 
-        glm::vec4 positions[3];
-        glm::vec4 colors[3];
-
-        DefaultRenderer(positions, colors);
-
-        glCreateBuffers(2, &m_buffer[0]);
-        glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, 0); // I don't think order matters here... but we'll see!
-
-        glCreateVertexArrays(1, &m_vertex_array_object);
-        glBindVertexArray(m_vertex_array_object);
-
-        // Formats the first element of the buffer to contain position info - used in SoA approach
-        glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
-                                                    0,                                      // First vertex buffer binding
-                                                    m_buffer[0],                    // Buffer object
-                                                    0,                                     // Buffer offset
-                                                    sizeof(GLfloat) * 4);       // Stride
-
-        glVertexArrayAttribFormat(m_vertex_array_object, // Vertex array object
-                                                    0,                                      // First attribute
-                                                    4,                                      // Component count, in this case 4
-                                                    GL_FLOAT,                    // Component data type, in this case float
-                                                    GL_FALSE,                    // Is normalized
-                                                    0);                                    // Location of first element of the vertex
-        glEnableVertexArrayAttrib(m_vertex_array_object, 0);
-
-        glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, colors, 0);
-        glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
-        glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
-        glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
-
-        // to be used a little later
-        m_projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
-        m_camera = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f));
+        BasicTriangle();
     }
     else {
         std::cout << "Error in creating window!";
@@ -94,14 +61,44 @@ void GFXManager::Run() {
 }
 
 // Array size intended to be 3
-void GFXManager::DefaultRenderer(glm::vec4* position, glm::vec4* color) {
-    position[0] = glm::vec4(0.25f, -0.25f, 0.5f, 1.0f);
-    position[1] = glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f);
-    position[2] = glm::vec4(0.25f, 0.25f, 0.5f, 1.0f);
+void GFXManager::BasicTriangle() {
+    glm::vec4 positions[3] = { glm::vec4(0.25f, -0.25f, 0.5f, 1.0f),
+                                             glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
+                                             glm::vec4(0.25f, 0.25f, 0.5f, 1.0f) };
     
-    color[0] = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-    color[1] = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-    color[2] = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    glm::vec4 colors[3] = { glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+                                        glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+                                        glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
+
+    glCreateBuffers(2, &m_buffer[0]);
+    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, 0); // I don't think order matters here... but we'll see!
+
+    glCreateVertexArrays(1, &m_vertex_array_object);
+    glBindVertexArray(m_vertex_array_object);
+
+    // Formats the first element of the buffer to contain position info - used in SoA approach
+    glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
+        0,                                      // First vertex buffer binding
+        m_buffer[0],                    // Buffer object
+        0,                                     // Buffer offset
+        sizeof(GLfloat) * 4);       // Stride
+
+    glVertexArrayAttribFormat(m_vertex_array_object, // Vertex array object
+        0,                                      // First attribute
+        4,                                      // Component count, in this case 4
+        GL_FLOAT,                    // Component data type, in this case float
+        GL_FALSE,                    // Is normalized
+        0);                                    // Location of first element of the vertex
+    glEnableVertexArrayAttrib(m_vertex_array_object, 0);
+
+    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, colors, 0);
+    glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
+    glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
+}
+
+void GFXManager::SGasket() {
+    // Stub
 }
 
 GLuint GFXManager::CreateDefaultProgram() {
@@ -138,18 +135,7 @@ GLuint GFXManager::CreateDefaultProgram() {
     return program;
 }
 
-/*
-    Other shader programs will be loaded later. Some ideas:
-
-    GLuint GFXManager::CreateCellShadeProgram() {
-
-    }
-
-    GLuint GFXManager::CreateTeaPot() {
-    
-    }
-*/
-
+// This should be the default render that I use in a general application.
 void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);

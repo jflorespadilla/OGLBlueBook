@@ -20,7 +20,8 @@ public:
 	void Start();
 	void Run();
 	void Renderer(float dt);
-	void DefaultRenderer(glm::vec4* position, glm::vec4* color);
+	void BasicTriangle();
+	void SGasket();
 	GLuint CreateDefaultProgram();
 
 private:
