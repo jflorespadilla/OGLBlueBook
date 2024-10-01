@@ -41,8 +41,8 @@ void GFXManager::Start() {
 
         // Decided to move different rendering solutions to their own fuction.
 
-        BasicTriangle();
-        //SGasket(); // Not working yet. Have to figure out why.
+        //BasicTriangle();
+        SGasket(); // Not working yet. Have to figure out why.
     }
     else {
         std::cout << "Error in creating window!";
@@ -72,7 +72,7 @@ void GFXManager::BasicTriangle() {
                                         glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
 
     glCreateBuffers(2, &m_buffer[0]);
-    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, 0); // I don't think order matters here... but we'll see!
+    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, 0);
 
     glCreateVertexArrays(1, &m_vertex_array_object);
     glBindVertexArray(m_vertex_array_object);
@@ -101,28 +101,22 @@ void GFXManager::BasicTriangle() {
 void GFXManager::SGasket() {
     const int numPoints = 3;
     glm::vec4 positions[numPoints];
-    glm::vec4 colors[numPoints];
+    glm::vec4 colors[numPoints] = { glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+                                                          glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+                                                          glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
 
     // Initial triangle
-    glm::vec4 triangleVert[3] = { glm::vec4(-1.0f, -1.0f, 0.5f, 0.0f),
-                                                   glm::vec4( 0.0f,  1.0f, 0.5f, 0.0f),
-                                                   glm::vec4( 1.0f, -1.0f, 0.5f, 0.0f) };
+    glm::vec4 triangleVert[3] = { glm::vec4(-1.0f, -1.0f, 0.5f, 1.0f),
+                                                   glm::vec4( 1.0f,  -1.0f, 0.5f, 1.0f),
+                                                   glm::vec4( 0.0f, 1.0f, 0.5f, 1.0f) };
     // Starting point
-    positions[0] = glm::vec4(0.25f, 0.5f, 0.5f, 0.0f);
-    colors[0] = glm::vec4(0.35f , 0.64f, 0.17f, 0.0f);
+    positions[0] = glm::vec4(0.25f, 0.25f, 0.5f, 1.0f);
+    //positions[1] = glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f);
+    //positions[2] = glm::vec4(-0.25f, 0.25f, 0.5, 1.0f);
 
     for (int k = 1; k < numPoints; k++) {
         int j = rand() % 3;
-        if (j == 0) {
-            colors[k] = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
-        }
-        else if (j == 1) {
-            colors[k] = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
-        }
-        else {
-            colors[k] = glm::vec4(0.0f, 0.0f, 1.0f, 0.0f);
-        }
-        positions[k] = (positions[k - 1] + triangleVert[j]) / 2.0f;
+        positions[k] = (positions[k - 1] + triangleVert[j]) / 2.0f; // Bug is right here, but I'm too tire to solve this right now.
     }
 
     glCreateBuffers(2, &m_buffer[0]);
