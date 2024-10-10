@@ -41,8 +41,8 @@ void GFXManager::Start() {
 
         // Decided to move different rendering solutions to their own fuction.
 
-        //BasicTriangle();
-        SGasket(); // Not working yet. Have to figure out why.
+        BasicTriangle();
+        // Forget the gasket, gonna go simpler and try making a cube instead.
     }
     else {
         std::cout << "Error in creating window!";
@@ -93,54 +93,6 @@ void GFXManager::BasicTriangle() {
     glEnableVertexArrayAttrib(m_vertex_array_object, 0);
 
     glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, colors, 0);
-    glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
-    glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
-    glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
-}
-
-void GFXManager::SGasket() {
-    const int numPoints = 3;
-    glm::vec4 positions[numPoints];
-    glm::vec4 colors[numPoints] = { glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-                                                          glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
-                                                          glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
-
-    // Initial triangle
-    glm::vec4 triangleVert[3] = { glm::vec4(-1.0f, -1.0f, 0.5f, 1.0f),
-                                                   glm::vec4( 1.0f,  -1.0f, 0.5f, 1.0f),
-                                                   glm::vec4( 0.0f, 1.0f, 0.5f, 1.0f) };
-    // Starting point
-    positions[0] = glm::vec4(0.25f, 0.25f, 0.5f, 1.0f);
-    //positions[1] = glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f);
-    //positions[2] = glm::vec4(-0.25f, 0.25f, 0.5, 1.0f);
-
-    for (int k = 1; k < numPoints; k++) {
-        int j = rand() % 3;
-        positions[k] = (positions[k - 1] + triangleVert[j]) / 2.0f; // Bug is right here, but I'm too tire to solve this right now.
-    }
-
-    glCreateBuffers(2, &m_buffer[0]);
-    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * numPoints, positions, 0);
-
-    glCreateVertexArrays(1, &m_vertex_array_object);
-    glBindVertexArray(m_vertex_array_object);
-
-    // Formats the first element of the buffer to contain position info - used in SoA approach
-    glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
-        0,                                      // First vertex buffer binding
-        m_buffer[0],                    // Buffer object
-        0,                                     // Buffer offset
-        sizeof(GLfloat) * 4);       // Stride
-
-    glVertexArrayAttribFormat(m_vertex_array_object, // Vertex array object
-        0,                                      // First attribute
-        4,                                      // Component count, in this case 4
-        GL_FLOAT,                    // Component data type, in this case float
-        GL_FALSE,                    // Is normalized
-        0);                                    // Location of first element of the vertex
-    glEnableVertexArrayAttrib(m_vertex_array_object, 0);
-
-    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * numPoints, colors, 0);
     glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
     glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
