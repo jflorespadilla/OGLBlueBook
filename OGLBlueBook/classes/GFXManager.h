@@ -21,7 +21,7 @@ public:
 	void Run();
 	void Renderer(float dt);
 	void BasicTriangle();
-	void SGasket();
+	void BasicCube();
 	GLuint CreateDefaultProgram();
 
 private:
