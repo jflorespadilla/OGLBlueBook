@@ -38,7 +38,7 @@ GFXManager::~GFXManager() {
 void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
-
+        glUseProgram(m_rendering_program);
         // I'm missing something here.
         // I should find a way to make sure this function ends regardless or error or not
 
@@ -178,7 +178,6 @@ GLuint GFXManager::CreateDefaultProgram() {
 void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
-    glUseProgram(m_rendering_program);
     
     glEnableVertexArrayAttrib(m_vertex_array_object, 0);
     glEnableVertexAttribArray(1); 
