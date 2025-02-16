@@ -12,7 +12,7 @@ m_glfwFlag(false)
     }
 
     // Adding window hints for clarity
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     m_window = glfwCreateWindow(850, 620, "Hola", NULL, NULL);
@@ -39,10 +39,9 @@ void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
         glUseProgram(m_rendering_program);
-        // I'm missing something here.
-        // I should find a way to make sure this function ends regardless or error or not
 
         //BasicTriangle();
+        // Need to make a basic square program
         BasicCube();
     }
     else {
@@ -56,13 +55,12 @@ void GFXManager::Run() {
         Renderer(glfwGetTime());
 
         glDisableVertexArrayAttrib(m_vertex_array_object, 0);
-        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(0);
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
 }
 
-// Array size intended to be 3
 void GFXManager::BasicTriangle() {
     glm::vec4 positions[3] = { glm::vec4(0.25f, -0.25f, 0.5f, 1.0f),
                                              glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
@@ -100,8 +98,55 @@ void GFXManager::BasicTriangle() {
 }
 
 void GFXManager::BasicCube() {
-    // Clearly I don't have the base knowlege to produce a cube quite yet.
-    // I'm going to read a little more before I attempt to implement this function agian.
+    // A memory leak somewhere is getting me
+    // Gonna try an look for it before changing code to match blue book exactly
+    glm::vec4 positions[12] = { glm::vec4(-0.25f, 0.25f, -0.5f, 1.0f),
+                                                 glm::vec4(-0.25f, -0.25f, -0.5f, 1.0f),
+                                                 glm::vec4(0.25f, -0.25f, -0.5f, 1.0f),
+
+                                                 glm::vec4(0.25f, -0.25f, -0.5f, 1.0f),
+                                                 glm::vec4(0.25f, 0.25f, -0.5f, 1.0f),
+                                                 glm::vec4(-0.25f, 0.25f, -0.5f, 1.0f),
+    
+                                                 glm::vec4(-0.25f, 0.25f, -0.5f, 1.0f),
+                                                 glm::vec4(0.25f, 0.25f, -0.5f, 1.0f),
+                                                 glm::vec4(0.25f, 0.25f, 0.5f, 1.0f),
+
+                                                 glm::vec4(0.25f, 0.25f, 0.5f, 1.0f),
+                                                 glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
+                                                 glm::vec4(-0.25f, 0.25f, -0.5f, 1.0f)};
+
+    glm::vec4 colors[3] = { glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+                                        glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+                                        glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
+
+    m_projection = glm::perspective(50.0f, 850.0f/620.0f, 0.1f, 100.0f);
+
+    glCreateBuffers(1, &m_buffer[0]);
+    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 12, positions, 0);
+
+    glCreateVertexArrays(1, &m_vertex_array_object);
+    glBindVertexArray(m_vertex_array_object);
+
+    // Yeup! I needed to describe the layout of the array still. Joy...
+    glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
+        0,                                      // First vertex buffer binding
+        m_buffer[0],                    // Buffer object
+        0,                                     // Buffer offset
+        sizeof(GLfloat) * 4);       // Stride
+
+    glVertexArrayAttribFormat(m_vertex_array_object, // Vertex array object
+        0,                                      // First attribute
+        4,                                      // Component count, in this case 4
+        GL_FLOAT,                    // Component data type, in this case float
+        GL_FALSE,                    // Is normalized
+        0);                                    // Location of first element of the vertex
+    glEnableVertexArrayAttrib(m_vertex_array_object, 0);
+
+    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, colors, 0);
+    glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
+    glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
 }
 
 GLuint GFXManager::CreateDefaultProgram() {
@@ -142,9 +187,17 @@ GLuint GFXManager::CreateDefaultProgram() {
 void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
-    
-    glEnableVertexArrayAttrib(m_vertex_array_object, 0);
-    glEnableVertexAttribArray(1); 
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    float TV = dt * glm::pi<float>() * 0.1f;
+    glm::mat4 mv_matrix = glm::translate(glm::mat4(0.0f), glm::vec3(0.0f, 0.0f, 5.0f)) *
+                                           glm::translate(glm::mat4(0.0f), glm::vec3(glm::sin(2.1f * TV) * 0.5f,
+                                                                                              glm::cos(1.7f * TV) * 0.5f,
+                                                                                              glm::sin(1.3f * TV) * glm::cos(1.5f * TV * 2.0f))) *
+                                           glm::rotate(glm::mat4(0.0f), dt * 45.0f, glm::vec3(0.0f, 1.0f, 0.0f)) *
+                                           glm::rotate(glm::mat4(0.0f), dt * 81.0f, glm::vec3(1.0, 0.0f, 0.0f));
+
+    glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(mv_matrix));
+    glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(m_projection));
+
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 }
