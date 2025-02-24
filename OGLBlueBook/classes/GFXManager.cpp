@@ -5,7 +5,9 @@ m_rendering_program(0),
 m_vertex_array_object(0),
 m_buffer {0, 0},
 m_window(NULL),
-m_glfwFlag(false)
+m_glfwFlag(false),
+m_projection(glm::mat4(1.0f)),
+m_camera(glm::mat4(1.0f))
 {
     if (!glfwInit()) {
         m_glfwFlag = true;
@@ -98,8 +100,7 @@ void GFXManager::BasicTriangle() {
 }
 
 void GFXManager::BasicCube() {
-    // A memory leak somewhere is getting me
-    // Gonna try an look for it before changing code to match blue book exactly
+    glEnable(GL_DEPTH_TEST); // Attempting to recrate cube from the book first, might try other methods to understand what's going on.
     glm::vec4 positions[12] = { glm::vec4(-0.25f, 0.25f, -0.5f, 1.0f),
                                                  glm::vec4(-0.25f, -0.25f, -0.5f, 1.0f),
                                                  glm::vec4(0.25f, -0.25f, -0.5f, 1.0f),
@@ -120,33 +121,13 @@ void GFXManager::BasicCube() {
                                         glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
                                         glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
 
-    m_projection = glm::perspective(50.0f, 850.0f/620.0f, 0.1f, 100.0f);
+    m_projection = glm::perspective(50.0f, 850.0f / 620.0f, 0.1f, 1.0f);
 
-    glCreateBuffers(1, &m_buffer[0]);
-    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 12, positions, 0);
-
-    glCreateVertexArrays(1, &m_vertex_array_object);
-    glBindVertexArray(m_vertex_array_object);
-
-    // Yeup! I needed to describe the layout of the array still. Joy...
-    glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
-        0,                                      // First vertex buffer binding
-        m_buffer[0],                    // Buffer object
-        0,                                     // Buffer offset
-        sizeof(GLfloat) * 4);       // Stride
-
-    glVertexArrayAttribFormat(m_vertex_array_object, // Vertex array object
-        0,                                      // First attribute
-        4,                                      // Component count, in this case 4
-        GL_FLOAT,                    // Component data type, in this case float
-        GL_FALSE,                    // Is normalized
-        0);                                    // Location of first element of the vertex
-    glEnableVertexArrayAttrib(m_vertex_array_object, 0);
-
-    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, colors, 0);
-    glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
-    glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
-    glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
+    glGenBuffers(1, &m_buffer[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, m_buffer[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 12, positions, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(0);
 }
 
 GLuint GFXManager::CreateDefaultProgram() {
@@ -185,16 +166,12 @@ GLuint GFXManager::CreateDefaultProgram() {
 
 // This should be the default render that I use in a general application.
 void GFXManager::Renderer(float dt) {
-    const GLfloat BGcolor[] = {0.5f, 0.1f, 0.3f, 1.0f};
+    const GLfloat BGcolor[] = {0.3f, 0.1f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
+    glClearBufferfi(GL_DEPTH_STENCIL, 0, 1.0f, 0);
 
-    float TV = dt * glm::pi<float>() * 0.1f;
-    glm::mat4 mv_matrix = glm::translate(glm::mat4(0.0f), glm::vec3(0.0f, 0.0f, 5.0f)) *
-                                           glm::translate(glm::mat4(0.0f), glm::vec3(glm::sin(2.1f * TV) * 0.5f,
-                                                                                              glm::cos(1.7f * TV) * 0.5f,
-                                                                                              glm::sin(1.3f * TV) * glm::cos(1.5f * TV * 2.0f))) *
-                                           glm::rotate(glm::mat4(0.0f), dt * 45.0f, glm::vec3(0.0f, 1.0f, 0.0f)) *
-                                           glm::rotate(glm::mat4(0.0f), dt * 81.0f, glm::vec3(1.0, 0.0f, 0.0f));
+    //float TV = dt * glm::pi<float>() * 0.1f;
+    glm::mat4 mv_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
 
     glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(mv_matrix));
     glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(m_projection));
