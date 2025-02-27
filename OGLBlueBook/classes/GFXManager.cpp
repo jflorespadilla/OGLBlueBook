@@ -100,34 +100,8 @@ void GFXManager::BasicTriangle() {
 }
 
 void GFXManager::BasicCube() {
-    glEnable(GL_DEPTH_TEST); // Attempting to recrate cube from the book first, might try other methods to understand what's going on.
-    glm::vec4 positions[12] = { glm::vec4(-0.25f, 0.25f, -0.5f, 1.0f),
-                                                 glm::vec4(-0.25f, -0.25f, -0.5f, 1.0f),
-                                                 glm::vec4(0.25f, -0.25f, -0.5f, 1.0f),
-
-                                                 glm::vec4(0.25f, -0.25f, -0.5f, 1.0f),
-                                                 glm::vec4(0.25f, 0.25f, -0.5f, 1.0f),
-                                                 glm::vec4(-0.25f, 0.25f, -0.5f, 1.0f),
-    
-                                                 glm::vec4(-0.25f, 0.25f, -0.5f, 1.0f),
-                                                 glm::vec4(0.25f, 0.25f, -0.5f, 1.0f),
-                                                 glm::vec4(0.25f, 0.25f, 0.5f, 1.0f),
-
-                                                 glm::vec4(0.25f, 0.25f, 0.5f, 1.0f),
-                                                 glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
-                                                 glm::vec4(-0.25f, 0.25f, -0.5f, 1.0f)};
-
-    glm::vec4 colors[3] = { glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-                                        glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
-                                        glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
-
-    m_projection = glm::perspective(50.0f, 850.0f / 620.0f, 0.1f, 1.0f);
-
-    glGenBuffers(1, &m_buffer[0]);
-    glBindBuffer(GL_ARRAY_BUFFER, m_buffer[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 12, positions, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
-    glEnableVertexAttribArray(0);
+    // Going to attempt to use inedex buffers first and then try this again
+    // Program form books simply doesn't work
 }
 
 GLuint GFXManager::CreateDefaultProgram() {
@@ -168,7 +142,6 @@ GLuint GFXManager::CreateDefaultProgram() {
 void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.3f, 0.1f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
-    glClearBufferfi(GL_DEPTH_STENCIL, 0, 1.0f, 0);
 
     //float TV = dt * glm::pi<float>() * 0.1f;
     glm::mat4 mv_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
