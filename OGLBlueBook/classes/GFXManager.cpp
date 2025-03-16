@@ -37,14 +37,16 @@ GFXManager::~GFXManager() {
     }
 }
 
+// Going to need some extra time to reorganize startup.
+// Working on differnt programs setting for easy sanity checks is needed.
 void GFXManager::Start() {
     if (!m_glfwFlag) {
         m_rendering_program = CreateDefaultProgram();
         glUseProgram(m_rendering_program);
 
-        //BasicTriangle();
+        BasicTriangle();
         // Need to make a basic square program
-        BasicCube();
+        //BasicCube();
     }
     else {
         std::cout << "Error in creating window!";
@@ -57,7 +59,7 @@ void GFXManager::Run() {
         Renderer(glfwGetTime());
 
         glDisableVertexArrayAttrib(m_vertex_array_object, 0);
-        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
@@ -73,7 +75,7 @@ void GFXManager::BasicTriangle() {
                                         glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
 
     glCreateBuffers(2, &m_buffer[0]);
-    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, 0);
+    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, GL_DYNAMIC_STORAGE_BIT);
 
     glCreateVertexArrays(1, &m_vertex_array_object);
     glBindVertexArray(m_vertex_array_object);
@@ -93,7 +95,7 @@ void GFXManager::BasicTriangle() {
         0);                                    // Location of first element of the vertex
     glEnableVertexArrayAttrib(m_vertex_array_object, 0);
 
-    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, colors, 0);
+    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, colors, GL_DYNAMIC_STORAGE_BIT);
     glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
     glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
@@ -143,11 +145,5 @@ void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.3f, 0.1f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
 
-    //float TV = dt * glm::pi<float>() * 0.1f;
-    glm::mat4 mv_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
-
-    glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(mv_matrix));
-    glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(m_projection));
-
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 }
