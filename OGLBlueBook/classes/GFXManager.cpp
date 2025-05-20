@@ -59,7 +59,7 @@ void GFXManager::Run() {
         Renderer(glfwGetTime());
 
         glDisableVertexArrayAttrib(m_vertex_array_object, 0);
-        glDisableVertexAttribArray(1);
+        glDisableVertexArrayAttrib(m_vertex_array_object, 1);
         glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
@@ -93,7 +93,7 @@ void GFXManager::BasicTriangle() {
         GL_FLOAT,                    // Component data type, in this case float
         GL_FALSE,                    // Is normalized
         0);                                    // Location of first element of the vertex
-    glEnableVertexArrayAttrib(m_vertex_array_object, 0);
+    //glEnableVertexArrayAttrib(m_vertex_array_object, 0); // Going to try moving this around
 
     glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, colors, GL_DYNAMIC_STORAGE_BIT);
     glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
@@ -144,6 +144,10 @@ GLuint GFXManager::CreateDefaultProgram() {
 void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.3f, 0.1f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
+
+    // Enabling attribues for they triangle
+    glEnableVertexArrayAttrib(m_vertex_array_object, 0);
+    glEnableVertexArrayAttrib(m_vertex_array_object, 1);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
