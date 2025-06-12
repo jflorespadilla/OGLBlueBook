@@ -22,7 +22,7 @@ public:
 	void Run();
 	void Renderer(float dt);
 	void BasicTriangle();
-	void BasicCube();
+	void BasicSquare();
 	GLuint CreateDefaultProgram();
 
 private:
