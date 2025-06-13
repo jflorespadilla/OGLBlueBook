@@ -70,7 +70,9 @@ void GFXManager::BasicTriangle() {
                                              glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
                                              glm::vec4(0.25f, 0.25f, 0.5f, 1.0f) };
     
-    glm::vec4 colors = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f); // This totally works!
+    glm::vec4 colors[3] = { glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+                                          glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+                                          glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}; // This totally works!
 
     glCreateBuffers(2, &m_buffer[0]);
     glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, GL_DYNAMIC_STORAGE_BIT);
@@ -93,7 +95,7 @@ void GFXManager::BasicTriangle() {
         0);                                    // Location of first element of the vertex
     //glEnableVertexArrayAttrib(m_vertex_array_object, 0); // Going to try moving this around
 
-    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4, &colors, GL_DYNAMIC_STORAGE_BIT);
+    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, &colors, GL_DYNAMIC_STORAGE_BIT);
     glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
     glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
