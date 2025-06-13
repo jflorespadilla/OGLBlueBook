@@ -64,15 +64,13 @@ void GFXManager::Run() {
 }
 
 void GFXManager::BasicTriangle() {
-    /*Need to adjust the vertex shader so that I can acutlly use this data*/
-    /*Right now I have the vertex info hard coded in the vertex shader*/
     glm::vec4 positions[3] = { glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
                                              glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
                                              glm::vec4(0.25f, 0.25f, 0.5f, 1.0f) };
     
     glm::vec4 colors[3] = { glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
                                           glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
-                                          glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}; // This totally works!
+                                          glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)};
 
     glCreateBuffers(2, &m_buffer[0]);
     glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, GL_DYNAMIC_STORAGE_BIT);
