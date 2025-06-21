@@ -45,6 +45,7 @@ void GFXManager::Start() {
         glUseProgram(m_rendering_program);
 
         BasicTriangle();
+        //BasicSquare();
     }
     else {
         std::cout << "Error in creating window!";
@@ -68,46 +69,6 @@ void GFXManager::BasicTriangle() {
                                              glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
                                              glm::vec4(0.25f, 0.25f, 0.5f, 1.0f) };
     
-    glm::vec4 colors[3] = { glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
-                                          glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
-                                          glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)};
-
-    glCreateBuffers(2, &m_buffer[0]);
-    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, GL_DYNAMIC_STORAGE_BIT);
-
-    glCreateVertexArrays(1, &m_vertex_array_object);
-    glBindVertexArray(m_vertex_array_object);
-
-    // Formats the first element of the buffer to contain position info - used in SoA approach
-    glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
-        0,                                      // First vertex buffer binding
-        m_buffer[0],                    // Buffer object
-        0,                                     // Buffer offset
-        sizeof(GLfloat) * 4);       // Stride
-
-    glVertexArrayAttribFormat(m_vertex_array_object, // Vertex array object
-        0,                                      // First attribute
-        4,                                      // Component count, in this case 4
-        GL_FLOAT,                    // Component data type, in this case float
-        GL_FALSE,                    // Is normalized
-        0);                                    // Location of first element of the vertex
-    //glEnableVertexArrayAttrib(m_vertex_array_object, 0); // Going to try moving this around
-
-    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, &colors, GL_DYNAMIC_STORAGE_BIT);
-    glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
-    glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
-    glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
-}
-
-// TODO - Implement this without index buffers first, then use index buffers
-void GFXManager::BasicSquare() {
-    /*A copy-pasta of the triangle for now*/
-
-    // I suppose without index buffers I'd need to use 3 more vectors for the second triangle.
-    glm::vec4 positions[4] = { glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
-                                         glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
-                                         glm::vec4(0.25f, 0.25f, 0.5f, 1.0f)};
-
     glm::vec4 colors[3] = { glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
                                         glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
                                         glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
@@ -134,6 +95,41 @@ void GFXManager::BasicSquare() {
     //glEnableVertexArrayAttrib(m_vertex_array_object, 0); // Going to try moving this around
 
     glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, colors, GL_DYNAMIC_STORAGE_BIT);
+    glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
+    glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
+}
+
+void GFXManager::BasicSquare() {
+    // Brute force. Next iteration should use IBO
+    glm::vec4 positions[6] = { glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
+                                             glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
+                                             glm::vec4(0.25f, 0.25f, 0.5f, 1.0f),
+
+                                             glm::vec4(0.25f, -0.25f, 0.5f, 1.0f),
+                                             glm::vec4(0.25f, 0.25f, 0.5f, 1.0f),
+                                             glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f) };
+
+    glm::vec4 colors[6] = { glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+                                          glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+                                          glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+
+                                          glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+                                          glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+                                          glm::vec4(0.0f, 0.0f, 1.0f, 1.0f) };
+
+    glCreateBuffers(2, &m_buffer[0]);
+    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 6, positions, GL_DYNAMIC_STORAGE_BIT);
+
+    glCreateVertexArrays(1, &m_vertex_array_object);
+    glBindVertexArray(m_vertex_array_object);
+
+    // Finish position buffer
+    glVertexArrayVertexBuffer(m_vertex_array_object, 0, m_buffer[0], 0, sizeof(GLfloat) * 4);
+    glVertexArrayAttribFormat(m_vertex_array_object, 0, 4, GL_FLOAT, GL_FALSE, 0);
+
+    // Finish color buffer
+    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 6, colors, GL_DYNAMIC_STORAGE_BIT);
     glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
     glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
