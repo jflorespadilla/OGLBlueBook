@@ -44,8 +44,8 @@ void GFXManager::Start() {
         m_rendering_program = CreateDefaultProgram();
         glUseProgram(m_rendering_program);
 
-        //BasicTriangle();
-        BasicSquare();
+        BasicTriangle();
+        //BasicSquare();
     }
     else {
         std::cout << "Error in creating window!";
@@ -65,8 +65,6 @@ void GFXManager::Run() {
 }
 
 void GFXManager::BasicTriangle() {
-    /*Need to adjust the vertex shader so that I can acutlly use this data*/
-    /*Right now I have the vertex info hard coded in the vertex shader*/
     glm::vec4 positions[3] = { glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
                                              glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
                                              glm::vec4(0.25f, 0.25f, 0.5f, 1.0f) };
@@ -103,7 +101,7 @@ void GFXManager::BasicTriangle() {
 }
 
 void GFXManager::BasicSquare() {
-    // Trying to brute force it for now
+    // Brute force. Next iteration should use IBO
     glm::vec4 positions[6] = { glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
                                              glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
                                              glm::vec4(0.25f, 0.25f, 0.5f, 1.0f),
@@ -126,21 +124,11 @@ void GFXManager::BasicSquare() {
     glCreateVertexArrays(1, &m_vertex_array_object);
     glBindVertexArray(m_vertex_array_object);
 
-    // Formats the first element of the buffer to contain position info - used in SoA approach
-    glVertexArrayVertexBuffer(m_vertex_array_object, // Vertex array object
-        0,                                      // First vertex buffer binding
-        m_buffer[0],                    // Buffer object
-        0,                                     // Buffer offset
-        sizeof(GLfloat) * 4);       // Stride
+    // Finish position buffer
+    glVertexArrayVertexBuffer(m_vertex_array_object, 0, m_buffer[0], 0, sizeof(GLfloat) * 4);
+    glVertexArrayAttribFormat(m_vertex_array_object, 0, 4, GL_FLOAT, GL_FALSE, 0);
 
-    glVertexArrayAttribFormat(m_vertex_array_object, // Vertex array object
-        0,                                      // First attribute
-        4,                                      // Component count, in this case 4
-        GL_FLOAT,                    // Component data type, in this case float
-        GL_FALSE,                    // Is normalized
-        0);                                    // Location of first element of the vertex
-    //glEnableVertexArrayAttrib(m_vertex_array_object, 0); // Going to try moving this around
-
+    // Finish color buffer
     glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 6, colors, GL_DYNAMIC_STORAGE_BIT);
     glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
     glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
@@ -190,5 +178,5 @@ void GFXManager::Renderer(float dt) {
     glEnableVertexArrayAttrib(m_vertex_array_object, 0);
     glEnableVertexArrayAttrib(m_vertex_array_object, 1);
 
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 }
