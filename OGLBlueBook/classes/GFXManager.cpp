@@ -44,8 +44,18 @@ void GFXManager::Start() {
         m_rendering_program = CreateDefaultProgram();
         glUseProgram(m_rendering_program);
 
-        BasicTriangle();
-        //BasicSquare();
+        std::cout << "Select Program to render:\n\n1) Triangle\n2) Square\n\n";
+        char input;
+        std::cin >> input;
+
+        switch (input) {
+        case '1':
+            BasicTriangle();
+            break;
+        case '2':
+            BasicSquare();
+            break;
+        }
     }
     else {
         std::cout << "Error in creating window!";
