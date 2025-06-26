@@ -74,6 +74,7 @@ void GFXManager::Run() {
     while (!glfwWindowShouldClose(m_window)) {
         Renderer(glfwGetTime());
 
+        // Disabling each vao attribute
         glDisableVertexArrayAttrib(m_vertex_array_object, 0);
         glDisableVertexArrayAttrib(m_vertex_array_object, 1);
         glfwSwapBuffers(m_window);
@@ -83,6 +84,7 @@ void GFXManager::Run() {
 
 void GFXManager::BasicTriangle() {
     const unsigned int vertexCount = 3;
+    // Setting positional and color data
     glm::vec4 positions[vertexCount] = { glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
                                              glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
                                              glm::vec4(0.25f, 0.25f, 0.5f, 1.0f) };
@@ -110,7 +112,6 @@ void GFXManager::BasicTriangle() {
         GL_FLOAT,                    // Component data type, in this case float
         GL_FALSE,                    // Is normalized
         0);                                    // Location of first element of the vertex
-    //glEnableVertexArrayAttrib(m_vertex_array_object, 0); // Going to try moving this around
 
     glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * vertexCount, colors, GL_DYNAMIC_STORAGE_BIT);
     glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
@@ -121,6 +122,7 @@ void GFXManager::BasicTriangle() {
 void GFXManager::BasicSquare() {
     // Brute force. Next iteration should use IBO
     const unsigned int vertexCount = 6;
+    // Setting positional and color data
     glm::vec4 positions[vertexCount] = { glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
                                              glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
                                              glm::vec4(0.25f, 0.25f, 0.5f, 1.0f),
@@ -190,7 +192,7 @@ void GFXManager::Renderer(float dt) {
     const GLfloat BGcolor[] = {0.3f, 0.1f, 0.0f, 1.0f};
     glClearBufferfv(GL_COLOR, 0, BGcolor);
 
-    // Enabling attribues for they triangle
+    // Enabling each attribue in vao
     glEnableVertexArrayAttrib(m_vertex_array_object, 0);
     glEnableVertexArrayAttrib(m_vertex_array_object, 1);
 
