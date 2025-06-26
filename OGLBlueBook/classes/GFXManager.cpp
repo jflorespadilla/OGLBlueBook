@@ -41,18 +41,25 @@ GFXManager::~GFXManager() {
 // Working on differnt programs setting for easy sanity checks is needed.
 void GFXManager::Start() {
     if (!m_glfwFlag) {
-        m_rendering_program = CreateDefaultProgram();
-        glUseProgram(m_rendering_program);
-
         std::cout << "Select Program to render:\n\n1) Triangle\n2) Square\n\n";
         char input;
         std::cin >> input;
 
         switch (input) {
         case '1':
+            m_shaders.GetShaderSource("shaders/triangle_vs.shader");
+            m_shaders.GetShaderSource("shaders/triangle_fs.shader");
+            m_rendering_program = CreateProgram();
+            m_verticies = 3;
+            glUseProgram(m_rendering_program);
             BasicTriangle();
             break;
         case '2':
+            m_shaders.GetShaderSource("shaders/square_vs.shader");
+            m_shaders.GetShaderSource("shaders/square_fs.shader");
+            m_rendering_program = CreateProgram();
+            m_verticies = 6;
+            glUseProgram(m_rendering_program);
             BasicSquare();
             break;
         }
@@ -75,16 +82,17 @@ void GFXManager::Run() {
 }
 
 void GFXManager::BasicTriangle() {
-    glm::vec4 positions[3] = { glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
+    const unsigned int vertexCount = 3;
+    glm::vec4 positions[vertexCount] = { glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
                                              glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
                                              glm::vec4(0.25f, 0.25f, 0.5f, 1.0f) };
     
-    glm::vec4 colors[3] = { glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+    glm::vec4 colors[vertexCount] = { glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
                                         glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
                                         glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) };
 
     glCreateBuffers(2, &m_buffer[0]);
-    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 3, positions, GL_DYNAMIC_STORAGE_BIT);
+    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * vertexCount, positions, GL_DYNAMIC_STORAGE_BIT);
 
     glCreateVertexArrays(1, &m_vertex_array_object);
     glBindVertexArray(m_vertex_array_object);
@@ -104,7 +112,7 @@ void GFXManager::BasicTriangle() {
         0);                                    // Location of first element of the vertex
     //glEnableVertexArrayAttrib(m_vertex_array_object, 0); // Going to try moving this around
 
-    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 3, colors, GL_DYNAMIC_STORAGE_BIT);
+    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * vertexCount, colors, GL_DYNAMIC_STORAGE_BIT);
     glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
     glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
@@ -112,7 +120,8 @@ void GFXManager::BasicTriangle() {
 
 void GFXManager::BasicSquare() {
     // Brute force. Next iteration should use IBO
-    glm::vec4 positions[6] = { glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
+    const unsigned int vertexCount = 6;
+    glm::vec4 positions[vertexCount] = { glm::vec4(-0.25f, 0.25f, 0.5f, 1.0f),
                                              glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f),
                                              glm::vec4(0.25f, 0.25f, 0.5f, 1.0f),
 
@@ -120,7 +129,7 @@ void GFXManager::BasicSquare() {
                                              glm::vec4(0.25f, 0.25f, 0.5f, 1.0f),
                                              glm::vec4(-0.25f, -0.25f, 0.5f, 1.0f) };
 
-    glm::vec4 colors[6] = { glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+    glm::vec4 colors[vertexCount] = { glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
                                           glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
                                           glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
 
@@ -129,7 +138,7 @@ void GFXManager::BasicSquare() {
                                           glm::vec4(0.0f, 0.0f, 1.0f, 1.0f) };
 
     glCreateBuffers(2, &m_buffer[0]);
-    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * 6, positions, GL_DYNAMIC_STORAGE_BIT);
+    glNamedBufferStorage(m_buffer[0], sizeof(GLfloat) * 4 * vertexCount, positions, GL_DYNAMIC_STORAGE_BIT);
 
     glCreateVertexArrays(1, &m_vertex_array_object);
     glBindVertexArray(m_vertex_array_object);
@@ -139,16 +148,13 @@ void GFXManager::BasicSquare() {
     glVertexArrayAttribFormat(m_vertex_array_object, 0, 4, GL_FLOAT, GL_FALSE, 0);
 
     // Finish color buffer
-    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * 6, colors, GL_DYNAMIC_STORAGE_BIT);
+    glNamedBufferStorage(m_buffer[1], sizeof(GLfloat) * 4 * vertexCount, colors, GL_DYNAMIC_STORAGE_BIT);
     glVertexArrayVertexBuffer(m_vertex_array_object, 1, m_buffer[1], 0, sizeof(GLfloat) * 4);
     glVertexArrayAttribFormat(m_vertex_array_object, 1, 4, GL_FLOAT, GL_FALSE, 0);
     glVertexArrayAttribBinding(m_vertex_array_object, 1, 1);
 }
 
-GLuint GFXManager::CreateDefaultProgram() {
-    m_shaders.GetShaderSource("shaders/vs.shader");
-    m_shaders.GetShaderSource("shaders/fs.shader");
-
+GLuint GFXManager::CreateProgram() {
     GLuint vertex_shader;
     GLuint fragment_shader;
     GLuint program;
@@ -188,5 +194,5 @@ void GFXManager::Renderer(float dt) {
     glEnableVertexArrayAttrib(m_vertex_array_object, 0);
     glEnableVertexArrayAttrib(m_vertex_array_object, 1);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, m_verticies);
 }

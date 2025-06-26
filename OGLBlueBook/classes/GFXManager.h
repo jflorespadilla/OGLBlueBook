@@ -23,9 +23,10 @@ public:
 	void Renderer(float dt);
 	void BasicTriangle();
 	void BasicSquare();
-	GLuint CreateDefaultProgram();
+	GLuint CreateProgram();
 
 private:
+	unsigned int m_verticies;
 	GLuint m_rendering_program;
 	GLuint m_vertex_array_object;
 	GLuint m_buffer[2];
