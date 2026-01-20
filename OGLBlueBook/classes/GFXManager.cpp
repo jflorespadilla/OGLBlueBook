@@ -1,6 +1,7 @@
 #include "GFXManager.h"
 
 GFXManager::GFXManager():
+m_verticies(0),
 m_rendering_program(0),
 m_vertex_array_object(0),
 m_buffer {0, 0},
@@ -17,7 +18,11 @@ m_camera(glm::mat4(1.0f))
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    m_window = glfwCreateWindow(850, 620, "Hola", NULL, NULL);
+
+    int width = 850;
+    int hight = 620;
+    m_window = glfwCreateWindow(width, hight, "Test window of depression", NULL, NULL);
+    
     if (!m_window) {
         glfwTerminate();
         m_glfwFlag = true;
